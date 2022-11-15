@@ -17,4 +17,4 @@ COPY ${JAR_FILE} app.jar
 
 
 # run
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java", "-Dswgger.matcheingStrategy=${ant_path_matcher}", "-jar","app.jar"]
