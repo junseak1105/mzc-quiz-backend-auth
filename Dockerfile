@@ -4,7 +4,7 @@ FROM appinair/jdk11-maven
 # Add Author info
 LABEL maintainer="dudrl0944@gmail.com"
 
-ARGJAR_FILE=./build/libs/quiz-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=./build/libs/quiz-0.0.1-SNAPSHOT.jar
 
 # copy jar
 COPY ${JAR_FILE} app.jar
