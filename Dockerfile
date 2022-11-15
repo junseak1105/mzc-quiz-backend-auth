@@ -16,4 +16,4 @@ COPY ${JAR_FILE} app.jar
 
 
 # run
-ENTRYPOINT ["java", "-Dswgger.matcheingStrategy=${ant_path_matcher}", "-Dmongodb.host=${mongodb.host}", "-Dmongodb.port=${mongodb.port}", "-Dmongodb.database=${mongodb.database}","-Dmongodb.username=${mongodb.username}","-Dmongodb.passwd=${mongodb.passwd}","-jar","app.jar"]
+ENTRYPOINT ["java", "-Dswgger.matcheingStrategy=${ant_path_matcher}", "-Denv-mongodb-host=${env-mongodb-host}", "-Denv-mongodb-port=${env-mongodb-port}", "-Denv-mongodb-database=${env-mongodb-database}","-Denv-mongodb-username=${env-mongodb-username}","-Denv-mongodb-passwd=${env-mongodb-passwd}","-jar","app.jar"]
