@@ -15,6 +15,5 @@ COPY ${JAR_FILE} app.jar
 #RUN apt-get install -y tzdata
 
 
-
 # run
-ENTRYPOINT ["java", "-Dswgger.matcheingStrategy=${ant_path_matcher}", "-jar","app.jar"]
+ENTRYPOINT ["java", "-Dswgger.matcheingStrategy=${ant_path_matcher}", "-Dmongodb.host=${mongodb.host}", "-Dmongodb.port=${mongodb.port}", "-Dmongodb.database=${mongodb.database}","-Dmongodb.username=${mongodb.username}","-Dmongodb.passwd=${mongodb.passwd}","-jar","app.jar"]
