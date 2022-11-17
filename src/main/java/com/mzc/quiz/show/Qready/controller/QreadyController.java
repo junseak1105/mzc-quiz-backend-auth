@@ -5,6 +5,7 @@ import com.mzc.quiz.show.Qready.entity.Show;
 import com.mzc.quiz.show.Qready.entity.ShowInfo;
 import com.mzc.quiz.show.Qready.repository.QreadyRepository;
 import com.mzc.quiz.show.Qready.request.ShowReq;
+import com.mzc.quiz.show.Qready.response.QuizListRes;
 import com.mzc.quiz.show.Qready.response.ShowListRes;
 import com.mzc.quiz.show.Qready.service.QreadyService;
 import lombok.extern.log4j.Log4j2;
@@ -42,12 +43,24 @@ public class QreadyController {
 
         for (Show show : shows) {
             ShowListRes res  = new ShowListRes();
-            res.set_id(show.get_id());
-            res.setShowInfo(show.getShowInfo());
+            res.setId(show.getId());
+            res.setQuizInfo(show.getShowInfo());
             showListRes.add(res);
         }
 
         return showListRes;
+
+    }
+
+    @PostMapping("/getQuizList")
+    public QuizListRes getQuizList(@RequestBody ShowReq showReq){
+        log.info(showReq);
+
+        QuizListRes quizListRes = qreadyService.searchQuiz(showReq.getId(), showReq.getEmail());
+
+
+
+        return quizListRes;
 
     }
 
