@@ -32,6 +32,13 @@ dependencies {
 
     // swagger
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+    //keycloak
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.keycloak:keycloak-spring-boot-starter:17.0.1'
+    implementation 'org.keycloak.bom:keycloak-adapter-bom:17.0.1'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.7.5'
+
 }
 
 tasks.named('test') {
