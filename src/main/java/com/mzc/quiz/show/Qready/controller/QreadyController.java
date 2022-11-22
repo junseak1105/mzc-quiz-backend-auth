@@ -1,5 +1,6 @@
 package com.mzc.quiz.show.Qready.controller;
 
+import com.mzc.global.config.DefaultRes;
 import com.mzc.quiz.show.Qready.entity.Quiz;
 import com.mzc.quiz.show.Qready.entity.Show;
 import com.mzc.quiz.show.Qready.entity.ShowInfo;
@@ -30,37 +31,21 @@ public class QreadyController {
 
 
     @PostMapping("/save")
-    public void showSave(@RequestBody Show show){
+    public DefaultRes showSave(@RequestBody Show show){
         qreadyService.showSave(show);
+        return DefaultRes.res(200,"success");
     }
 
     @PostMapping("/showList")
-    public List<ShowListRes> getShowList(@RequestBody ShowReq showReq){
+    public DefaultRes getShowList(@RequestBody ShowReq showReq){
         log.info(showReq);
-        List<Show> shows = qreadyService.searchShowByEmail(showReq.getEmail());
-
-        List<ShowListRes> showListRes = new ArrayList<>();
-
-        for (Show show : shows) {
-            ShowListRes res  = new ShowListRes();
-            res.setId(show.getId());
-            res.setQuizInfo(show.getShowInfo());
-            showListRes.add(res);
-        }
-
-        return showListRes;
-
+        return qreadyService.searchShowByEmail(showReq.getEmail());
     }
 
     @PostMapping("/getQuizList")
-    public QuizListRes getQuizList(@RequestBody ShowReq showReq){
+    public DefaultRes getQuizList(@RequestBody ShowReq showReq){
         log.info(showReq);
-
-        QuizListRes quizListRes = qreadyService.searchQuiz(showReq.getId(), showReq.getEmail());
-
-
-
-        return quizListRes;
+        return qreadyService.searchQuiz(showReq.getId(), showReq.getEmail());
 
     }
 
@@ -77,9 +62,7 @@ public class QreadyController {
 
     @PostMapping("/show")
     public Show printShow(@RequestBody Show show){
-
         System.out.println(show);
-
         return show;
     };
 
