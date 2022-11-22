@@ -8,22 +8,10 @@ import org.springframework.web.socket.config.annotation.*;
 @Configuration
 @EnableWebSocketMessageBroker
 public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
-    /*
-    private final ChatHandler chatHandler;
-
-    @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatHandler, "ws/chat")
-                .setAllowedOrigins("http://*:8080","http:/*.*.*.*:8080")
-                .withSockJS()
-                .setClientLibraryUrl("https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.js");
-    }
-    */
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/example")
-                .setAllowedOrigins("http://localhost:8080")
+                .setAllowedOrigins("*")
                 .withSockJS(); // WebSocket 또는 SockJS Client가 웹소켓 핸드셰이크 커넥션을 생성할 경로
     }
 
