@@ -1,7 +1,7 @@
-package com.mzc.Service;
+package com.mzc.redis.Service;
 
-import com.mzc.domain.User;
-import com.mzc.repository.UserRepository;
+import com.mzc.redis.model.User;
+import com.mzc.redis.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

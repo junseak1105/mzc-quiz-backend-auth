@@ -1,6 +1,6 @@
-package com.mzc.Service;
+package com.mzc.redis.Service;
 
-import com.mzc.domain.User;
+import com.mzc.redis.model.User;
 
 import java.util.List;
 

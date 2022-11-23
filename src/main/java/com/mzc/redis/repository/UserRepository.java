@@ -1,6 +1,6 @@
-package com.mzc.repository;
+package com.mzc.redis.repository;
 
-import com.mzc.domain.User;
+import com.mzc.redis.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

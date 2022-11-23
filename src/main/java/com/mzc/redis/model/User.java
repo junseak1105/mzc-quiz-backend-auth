@@ -1,4 +1,4 @@
-package com.mzc.domain;
+package com.mzc.redis.model;
 
 import lombok.Data;
 
