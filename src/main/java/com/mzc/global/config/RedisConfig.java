@@ -1,73 +1,58 @@
-package com.mzc.global.config;
-
-import com.mzc.redis.model.Conversation;
-import com.mzc.redis.model.MessageModel;
-import com.mzc.redis.model.User;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-@Configuration
-@EnableRedisRepositories
-public class RedisConfig {
-    private @Value("${spring.redis.host}") String redisHost;
-    private @Value("${spring.redis.port}") int redisPort;
-
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory(){
-        return new LettuceConnectionFactory(redisHost,redisPort);
-    }
-
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(){
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
-
-        return redisTemplate;
-    }
-
-    @Bean
-    public RedisTemplate<String, Conversation> conversationTemplate(){
-        RedisTemplate<String, Conversation> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Conversation.class));
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Conversation.class));
-
-        return redisTemplate;
-    }
-
-    @Bean
-    public RedisTemplate<String, User> userTemplate(){
-        RedisTemplate<String, User> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
-
-        return redisTemplate;
-    }
-
-    @Bean
-    public RedisTemplate<String, MessageModel> messageTemplate(){
-        RedisTemplate<String, MessageModel> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(MessageModel.class));
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(MessageModel.class));
-
-        return redisTemplate;
-    }
-}
+//package com.mzc.global.config;
+//
+//import io.lettuce.core.RedisURI;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.data.redis.connection.RedisConnection;
+//import org.springframework.data.redis.connection.RedisConnectionFactory;
+//import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+//import org.springframework.data.redis.core.RedisTemplate;
+//import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+//import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+//import org.springframework.data.redis.serializer.StringRedisSerializer;
+//
+//@RequiredArgsConstructor
+//@Configuration
+//@EnableRedisRepositories
+//public class RedisConfig {
+//    private final RedisProperties redisProperties;
+//
+////    @Bean
+////    public RedisConnectionFactory redisConnectionFactory(){
+////        return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
+////    }
+//
+//    //@Bean
+//    public RedisTemplate<?, ?> redisTemplate(){
+//        RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+//        redisTemplate.setConnectionFactory(redisConnectionFactory());
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        return redisTemplate;
+//    }
+//
+//   // @Bean
+//    public RedisConnectionFactory redisConnectionFactory(){
+//        RedisURI redisHost = RedisURI.create(redisProperties.getHost());
+//        RedisURI redisPort = RedisURI.create(String.valueOf(redisProperties.getPort()));
+//
+//        org.springframework.data.redis.connection.RedisConfiguration configuration = LettuceConnectionFactory.createRedisConfiguration(redisHost); // 제디스, 레투스 방법 으로 연결
+//        LettuceConnectionFactory factory = new LettuceConnectionFactory(configuration);
+//        factory.afterPropertiesSet();
+//        return factory;
+//    }
+//
+//    // 접근이 자주 되는 데이터를 캐싱하는 것이 좋음
+//   //Bean
+///*    public RedisTemplate<String, User> userRedisTemplate(RedisConnectionFactory redisConnectionFactory){
+//        RedisTemplate<String, User> redisTemplate = new RedisTemplate<>();
+//        redisTemplate.setConnectionFactory(redisConnectionFactory);
+//        //redisTemplate.opsForValue(); // get/set 기본적으로 할 수 있게 해주는 것
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<User>(User.class));
+//        return redisTemplate;
+//    }*/
+//
+//
+//}
