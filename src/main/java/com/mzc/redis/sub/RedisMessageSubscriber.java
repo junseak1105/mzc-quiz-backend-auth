@@ -1,4 +1,4 @@
-package com.mzc.configuration;
+package com.mzc.redis.sub;
 
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;

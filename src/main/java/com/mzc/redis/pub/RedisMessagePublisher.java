@@ -1,4 +1,4 @@
-package com.mzc.configuration;
+package com.mzc.redis.pub;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

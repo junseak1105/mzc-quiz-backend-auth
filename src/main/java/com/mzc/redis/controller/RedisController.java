@@ -1,9 +1,9 @@
-package com.mzc.controller;
+package com.mzc.redis.controller;
 
 
-import com.mzc.configuration.RedisMessagePublisher;
-import com.mzc.configuration.RedisMessageSubscriber;
-import com.mzc.model.Message;
+import com.mzc.redis.pub.RedisMessagePublisher;
+import com.mzc.redis.sub.RedisMessageSubscriber;
+import com.mzc.redis.model.QuizMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ public class RedisController {
 
 
     @PostMapping("/publish")
-    public void publish(@RequestBody Message message) {
-        logger.info(">> publishing : {}", message);
-        messagePublisher.publish(message.toString());
+    public void publish(@RequestBody QuizMessage quizMessage) {
+        logger.info(">> publishing : {}", quizMessage);
+        messagePublisher.publish(quizMessage.toString());
     }
 
     @GetMapping("/subscribe")
