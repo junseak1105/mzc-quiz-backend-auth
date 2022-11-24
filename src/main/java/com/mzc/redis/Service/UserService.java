@@ -1,3 +1,4 @@
+/*
 package com.mzc.redis.Service;
 
 import com.mzc.redis.model.User;
@@ -11,3 +12,4 @@ public interface UserService {
     public User update(User user);
     public User create(User user);
 }
+*/

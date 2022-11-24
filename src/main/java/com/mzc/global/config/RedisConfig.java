@@ -1,5 +1,6 @@
 package com.mzc.global.config;
 
+import com.mzc.redis.model.QuizMessage;
 import com.mzc.redis.pub.MessagePublisher;
 import com.mzc.redis.pub.RedisMessagePublisher;
 import com.mzc.redis.sub.RedisMessageSubscriber;
@@ -12,7 +13,11 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Configuration
@@ -44,7 +49,22 @@ public class RedisConfig {
     {
         RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericToStringSerializer<Object>(Object.class));
+        redisTemplate.setKeySerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
+        return redisTemplate;
+    }
+
+    @Bean
+    RedisTemplate<List,Object> listRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+    {
+        RedisTemplate<List,Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericToStringSerializer<Object>(Object.class));
+        redisTemplate.setKeySerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
         return redisTemplate;
     }
 

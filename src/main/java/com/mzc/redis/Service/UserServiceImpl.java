@@ -1,3 +1,4 @@
+/*
 package com.mzc.redis.Service;
 
 import com.mzc.redis.model.User;
@@ -69,4 +70,4 @@ public class UserServiceImpl implements UserService {
         logger.debug(" << UserService : Exiting create");
         return userToRet;
     }
-}
+}*/

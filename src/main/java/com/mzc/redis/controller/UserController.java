@@ -1,3 +1,4 @@
+/*
 package com.mzc.redis.controller;
 
 import com.mzc.redis.Service.UserService;
@@ -26,7 +27,6 @@ public class UserController {
     public User getUser(@PathVariable long id){
         logger.debug(" >> UserController : /user/{} call : ",id);
         return userService.getUser(id);
-
     }
 
     @PostMapping("/user")
@@ -37,7 +37,6 @@ public class UserController {
     @GetMapping("/users")
     public List<User> getAll(){
         logger.debug(" >> UserController : /users : ");
-
         return userService.getAll();
     }
 
@@ -56,6 +55,5 @@ public class UserController {
         logger.debug(" >> UserController : /delete : ",id);
         userService.delete(id);
         logger.debug(" << UserController : /delete : ",id);
-
     }
-}
+}*/
