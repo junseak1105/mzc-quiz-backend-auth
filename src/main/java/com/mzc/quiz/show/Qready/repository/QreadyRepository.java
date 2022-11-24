@@ -10,11 +10,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 public interface QreadyRepository extends MongoRepository<Show, String> {
-
-    List<Show> findShowByShowInfo_Email(String email);
-
+    Show save(Show show);
     Show findShowById(String Id);
-
-//    Quiz findShowByIdAndShowInfo_Email(String id, String email);
+    List<Show> findShowByQuizInfo_Email(String email);
+    Show deleteShowById(String Id);
 
 }

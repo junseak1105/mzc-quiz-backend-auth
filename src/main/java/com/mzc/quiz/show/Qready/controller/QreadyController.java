@@ -3,26 +3,19 @@ package com.mzc.quiz.show.Qready.controller;
 import com.mzc.global.config.DefaultRes;
 import com.mzc.quiz.show.Qready.entity.Quiz;
 import com.mzc.quiz.show.Qready.entity.Show;
-import com.mzc.quiz.show.Qready.entity.ShowInfo;
-import com.mzc.quiz.show.Qready.repository.QreadyRepository;
+import com.mzc.quiz.show.Qready.entity.QuizInfo;
 import com.mzc.quiz.show.Qready.request.ShowReq;
-import com.mzc.quiz.show.Qready.response.QuizListRes;
-import com.mzc.quiz.show.Qready.response.ShowListRes;
 import com.mzc.quiz.show.Qready.service.QreadyService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/Qready")
+@RequestMapping("/v1/show")
 @Log4j2
 public class QreadyController {
 
@@ -30,40 +23,28 @@ public class QreadyController {
     QreadyService qreadyService;
 
 
-    @PostMapping("/save")
-    public DefaultRes showSave(@RequestBody Show show){
-        qreadyService.showSave(show);
-        return DefaultRes.res(200,"success");
+    @GetMapping("/List")
+    @ApiOperation(value = "ShowList", notes = "ShowList")
+    public DefaultRes GetShowList(@RequestParam("email") String email) {
+        return qreadyService.getShowList(email);
     }
 
-    @PostMapping("/showList")
-    public DefaultRes getShowList(@RequestBody ShowReq showReq){
-        log.info(showReq);
-        return qreadyService.searchShowByEmail(showReq.getEmail());
+    @GetMapping("")
+    @ApiOperation(value = "Show", notes = "Show")
+    public DefaultRes GetShow(@RequestParam("showId") String showId) {
+        return qreadyService.getShow(showId);
     }
 
-    @PostMapping("/getQuizList")
-    public DefaultRes getQuizList(@RequestBody ShowReq showReq){
-        log.info(showReq);
-        return qreadyService.searchQuiz(showReq.getId(), showReq.getEmail());
-
+    @PostMapping("")
+    @ApiOperation(value = "CreateShow", notes = "CreateShow")
+    public DefaultRes CreateShow(@RequestBody Show show) {
+        return qreadyService.createShow(show);
     }
 
-    @PostMapping("/showinfo")
-    public ShowInfo printShowInfo(@RequestBody ShowInfo showInfo){
-        System.out.println(showInfo);
-        return showInfo;
+    @DeleteMapping("")
+    @ApiOperation(value = "DeleteShow", notes = "DeleteShow")
+    public DefaultRes DeleteShow(@RequestParam("showId") String showId) {
+        return qreadyService.deleteShow(showId);
     }
-
-    @PostMapping("/quiz")
-    public Quiz printQuiz(@RequestBody Quiz quiz){
-        return quiz;
-    }
-
-    @PostMapping("/show")
-    public Show printShow(@RequestBody Show show){
-        System.out.println(show);
-        return show;
-    };
 
 }

@@ -21,8 +21,6 @@ import java.util.List;
 @Log4j2
 public class QreadyServiceImpl implements QreadyService{
 
-//    @Autowired
-//    QreadyRepository qreadyRepository;
     private final MongoOperations operations;
     @Autowired
     QreadyRepository qreadyRepository;
@@ -33,42 +31,62 @@ public class QreadyServiceImpl implements QreadyService{
 
     @Override
     @Transactional
-    public void showSave(Show show) {
-        log.info("Transaction Start");
-        qreadyRepository.save(show);
-//        operations.insert();
+    public DefaultRes getShowList(String email) {
+        try{
+            List<Show> shows = qreadyRepository.findShowByQuizInfo_Email(email);
+            // Show의 QuizData를 제외한 나머지 데이터만 가져옴
+            List<ShowListRes> showListRes = new ArrayList<>();
+            for (Show show : shows) {
+                ShowListRes res  = new ShowListRes();
+                res.setId(show.getId());
+                res.setQuizInfo(show.getQuizInfo());
+                showListRes.add(res);
+            }
+            return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS, showListRes);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.BAD_REQUEST);
+        }
     }
 
     @Override
     @Transactional
-    public DefaultRes searchShowByEmail(String email) {
-        log.info("search  Show  By Email  ::  "+ email);
-        List<Show> shows = qreadyRepository.findShowByShowInfo_Email(email);
-        List<ShowListRes> showListRes = new ArrayList<>();
-        for (Show show : shows) {
-            ShowListRes res  = new ShowListRes();
-            res.setId(show.getId());
-            res.setQuizInfo(show.getShowInfo());
-            showListRes.add(res);
+    public DefaultRes getShow(String showId) {
+        System.out.println("showId : " + showId);
+        try {
+            Show show = qreadyRepository.findShowById(showId);
+            System.out.println("show : " + show);
+            return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS, show);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.BAD_REQUEST);
         }
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS,showListRes);
-
-
     }
 
     @Override
-    public DefaultRes searchQuiz(String id, String email) {
-        log.info("id : "+id +", email : "+email);
-
-        Show show = qreadyRepository.findShowById(id);
-
-        QuizListRes quizListRes = new QuizListRes();
-
-        List<Quiz> quiz = show.getQuizList();
-        quizListRes.setId(id);
-        quizListRes.setShowInfo(show.getShowInfo());
-        quizListRes.setQuizList(quiz);
-
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS,quizListRes);
+    @Transactional
+    public DefaultRes createShow(Show show) {
+        System.out.println(show);
+        try {
+            Show savedShow = qreadyRepository.save(show);
+            return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS, savedShow);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.BAD_REQUEST);
+        }
     }
+
+    @Override
+    @Transactional
+    public DefaultRes deleteShow(String showId) {
+        try {
+            qreadyRepository.deleteShowById(showId);
+            return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.BAD_REQUEST);
+        }
+    }
+
+
 }

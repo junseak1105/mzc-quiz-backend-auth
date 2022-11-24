@@ -10,7 +10,7 @@ public class Quiz {
     private String type;
     private String question;
     private MediaInfo mediaInfo;
-    private List<Choice> choiceList;
+    private Choice choiceList;
     private List<String> answer;
     private int time;
     private boolean userScore;
