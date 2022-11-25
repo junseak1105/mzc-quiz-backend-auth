@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.*;
 public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stomp/chat")
+        registry.addEndpoint("/stomp/quiz")
                 .setAllowedOrigins("http://localhost:3000")
                 .withSockJS()
                 .setClientLibraryUrl("https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.js"); // WebSocket 또는 SockJS Client가 웹소켓 핸드셰이크 커넥션을 생성할 경로
