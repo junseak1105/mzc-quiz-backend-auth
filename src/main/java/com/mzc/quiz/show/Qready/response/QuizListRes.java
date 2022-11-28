@@ -1,7 +1,7 @@
 package com.mzc.quiz.show.Qready.response;
 
 import com.mzc.quiz.show.Qready.entity.Quiz;
-import com.mzc.quiz.show.Qready.entity.ShowInfo;
+import com.mzc.quiz.show.Qready.entity.QuizInfo;
 import lombok.*;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 public class QuizListRes {
 
     private String id;
-    private ShowInfo showInfo;
+    private QuizInfo quizInfo;
     private List<Quiz> quizList;
 
 }

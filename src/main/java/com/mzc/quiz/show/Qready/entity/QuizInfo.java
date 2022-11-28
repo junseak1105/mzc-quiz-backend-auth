@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class ShowInfo {
+public class QuizInfo {
 
     private String email;
     private String title;

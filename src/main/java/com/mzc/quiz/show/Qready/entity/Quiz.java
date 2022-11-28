@@ -6,11 +6,11 @@ import java.util.List;
 
 @Data
 public class Quiz {
-    private String num;
+    private int num;
     private String type;
     private String question;
-    private MediaInfo mediaInfo;
-    private List<Choice> choiceList;
+    private Media media;
+    private Choice choiceList;
     private List<String> answer;
     private int time;
     private boolean userScore;
