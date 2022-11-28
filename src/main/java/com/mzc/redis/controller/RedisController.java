@@ -1,78 +1,44 @@
 package com.mzc.redis.controller;
 
-import com.mzc.redis.model.AccessToken;
-import com.mzc.redis.repository.AccessTokenRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
-import java.util.SplittableRandom;
+import com.mzc.redis.pub.RedisMessagePublisher;
+import com.mzc.redis.repository.TestRepository;
+import com.mzc.redis.sub.RedisMessageSubscriber;
+import com.mzc.redis.model.QuizMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-@Slf4j
-@RequiredArgsConstructor
+import java.util.List;
+
 @RestController
-@RequestMapping("/redis")
+@RequestMapping("/api/redis")
 public class RedisController {
-    private final AccessTokenRepository accessTokenRepository;
-    private final RedisTemplate redisTemplate;
 
-    @GetMapping("/")
-    public String ok(){
-        System.out.println("/");
-        return "ok";
+    private static Logger logger = LoggerFactory.getLogger(RedisController.class);
+
+    @Autowired
+    private RedisMessagePublisher messagePublisher;
+
+    @Autowired
+    private TestRepository testRepository;
+
+
+    @PostMapping("/publish")
+    public void publish(@RequestBody QuizMessage quizMessage) {
+        logger.info(">> publishing : {}", quizMessage);
+
+        System.out.println(quizMessage);
+
+        testRepository.save(quizMessage);
+
+        messagePublisher.publish(quizMessage.toString());
     }
 
-    @GetMapping("/keys")
-    public String keys(){
-        Set<byte[]> keys = redisTemplate.keys("*");
-        log.info("keys : " + keys.toString());
-        return "keys";
+    @GetMapping("/subscribe")
+    public List<String> getMessages(){
+        return RedisMessageSubscriber.messageList;
     }
 
-    @GetMapping("/save")
-    public String save(){
-        System.out.println("/save");
-        String randomId = createId();
-
-        AccessToken accessToken = AccessToken.builder()
-                .id(randomId)
-                .token("token")
-                .expired(1000)
-                .build();
-        log.info(">>>>> [save] accessToken={}", accessToken);
-
-        accessTokenRepository.save(accessToken);
-
-        return "save";
-    }
-
-    @GetMapping("/get")
-    public String get(){
-        System.out.println("/get");
-        String id = createId();
-        return accessTokenRepository.findById(id)
-                .map(AccessToken::getToken)
-                .orElse("0");
-    }
-
-    @GetMapping("/get2")
-    public String get2(){
-        System.out.println("/get2");
-        String id = createId();
-        return accessTokenRepository.findById(id)
-                .map(AccessToken::getToken)
-                .orElse("0");
-    }
-
-    private String createId() {
-        SplittableRandom random = new SplittableRandom();
-        return String.valueOf(random.nextInt(1,1_000_000_000));
-    }
 }
