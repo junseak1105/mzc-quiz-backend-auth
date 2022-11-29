@@ -1,7 +1,5 @@
-/*
-package com.mzc.quiz.play.redisutil;
+package com.mzc.quiz.play.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
@@ -13,32 +11,39 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisUtil {
 
-    @Autowired
     private RedisTemplate redisTemplate;
 
-    // ValueOperations : String
-    // https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/ValueOperations.html
-    ValueOperations<String, String> stringOperation = redisTemplate.opsForValue();
-    // HashOperations : Hash
-    // https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/HashOperations.html
-    HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
-    // SetOperations : Set
-    // https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/SetOperations.html
-    SetOperations<String, String> setOperations = redisTemplate.opsForSet();
-    // ZSetOperations : Sorted Set
-    // https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/ZSetOperations.html#add(K,V,double)
-    ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+    private ValueOperations<String, String> stringOperation;
+    private HashOperations<String, Object, Object> hashOperations;
+    private SetOperations<String, String> setOperations;
+    private ZSetOperations<String, String> zSetOperations;
+
+    public RedisUtil(RedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+        this.stringOperation = redisTemplate.opsForValue();
+        this.hashOperations = redisTemplate.opsForHash();
+        this.setOperations = redisTemplate.opsForSet();
+        this.zSetOperations = redisTemplate.opsForZSet();
+
+    }
+
+    // [ Gen Key ]
+
+    // PIN입력시 PLAY 키 반환
+    public String genKey(String pin){
+        return "PLAY" + ":" + pin;
+    }
 
 
-    // RedisTemplate 함수
-    // https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/RedisTemplate.html
+    // --------------------------------------------------------------------------
+    // [ Generic ]
     // 해당 키가 존재하는지 체크
     public Boolean hasKey(String key){
         return redisTemplate.hasKey(key);
     }
 
-    public Boolean expire(String key, long expireTime){
-        return redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
+    public Boolean expire(String key, long expireTime, TimeUnit timeUnit){
+        return redisTemplate.expire(key, expireTime, timeUnit);
     }
 
     // 키 삭제
@@ -48,23 +53,19 @@ public class RedisUtil {
 
 
     // --------------------------------------------------------------------------
-
     // [ String ]
     // key값에 따른 데이터 가져오기
     public String getData(String key){
-        //ValueOperations<String, String> stringOperation = redisTemplate.opsForValue();
         return stringOperation.get(key);
     }
 
     // 데이터 저장
     public void setData(String key, String value){
-        //ValueOperations<String, String> stringOperation = redisTemplate.opsForValue();
         stringOperation.set(key,value);
     }
 
     // 만료기간,데이터 저장
     public void setDataExpire(String key, String value, long duration){
-        //ValueOperations<String, String> stringOperation = redisTemplate.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);
         stringOperation.set(key,value,expireDuration);
     }
@@ -73,8 +74,9 @@ public class RedisUtil {
     public void deleteData(String key) {
         redisTemplate.delete(key);
     }
-    // ----------------------------------------------------------------------------------------
 
+
+    // ----------------------------------------------------------------------------------------
     // [ Hash ]
     // - 유저 각각 문제별 결과 저장
 
@@ -103,8 +105,8 @@ public class RedisUtil {
         return hashOperations.delete(key, field);
     }
 
-    // -----------------------------------------------------------------
 
+    // -----------------------------------------------------------------
     // [ Set ]
     // - 유저 닉네임
 
@@ -136,7 +138,6 @@ public class RedisUtil {
 
     // [ Sorted Set ]
     // - 종합 랭킹
-
     // Sorted Set 데이터 추가
     // 해당 데이터가 없으면 추가하고, 있으면 점수 업데이트
     public void setZData(String key, String value, double score){
@@ -156,10 +157,9 @@ public class RedisUtil {
     public Double getScore(String key, Object nickname){
         return zSetOperations.score(key, nickname);
     }
-    
+
     // Sorted Set 데이터 삭제
     public Long removeZData(String key, Object value){
         return zSetOperations.remove(key, value);
     }
 }
-*/
