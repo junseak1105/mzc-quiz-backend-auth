@@ -29,7 +29,7 @@ public class ClientController {
         // 이거 체점을 어디서 할건지, 프론트에서 하고 넘길건지, 아니면 백에서 할건지, 백에서 하는게 편하지 않을까?
         log.info(pin);
         log.info(quizMessage);
-        clientService.submitPerResult(pin, quizMessage);
+//        clientService.submitPerResult(pin, quizMessage);
 
     }
 
