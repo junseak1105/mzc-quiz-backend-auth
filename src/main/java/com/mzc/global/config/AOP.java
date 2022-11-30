@@ -15,15 +15,22 @@ public class AOP {
 
     @Before("execution(* com.mzc.quiz..controller..*.*(..))")
     public void logBefore() {
-        log.info("=================Request Start==================");
+    }
+
+    @AfterReturning(pointcut = "execution(* com.mzc.quiz..controller..*.*(..)))", returning = "result")
+    public void logReturn(DefaultRes result) {
+        log.info("| [statuscode]: " + result.getStatusCode());
+        log.info("| [responsemessage]: " + result.getResponseMessage());
+        log.info("| [data]: " + result.getData());
     }
 
     @Around("execution(* com.mzc.quiz..controller..*.*(..))")
     public Object logTime(ProceedingJoinPoint pjp) {
+        log.info("=================Request Start==================");
         long start = System.currentTimeMillis();
 
-        log.info("Target: " + pjp.getTarget());
-        log.info("Param: " + Arrays.toString(pjp.getArgs()));
+        log.info("| [Target]: " + pjp.getTarget());
+        log.info("| [Param]: " + Arrays.toString(pjp.getArgs()));
 
 
         //invoke method
@@ -38,17 +45,11 @@ public class AOP {
 
         long end = System.currentTimeMillis();
 
-        log.info("TIME: "  + (end - start));
+        log.info("| [TIME]: "  + (end - start));
 
+        log.info("=================Request End====================");
         return result;
     }
 
-    @AfterReturning(pointcut = "execution(* com.mzc.quiz..controller..*.*(..)))", returning = "result")
-    public void logReturn(DefaultRes result) {
-        log.info("----------------------");
-        log.info("statuscode: " + result.getStatusCode());
-        log.info("responsemessage: " + result.getResponseMessage());
-        log.info("data: " + result.getData());
-        log.info("=================Request End==================");
-    }
+
 }
