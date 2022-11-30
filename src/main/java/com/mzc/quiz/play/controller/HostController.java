@@ -18,9 +18,8 @@ public class HostController {
 
     // CREATEPLAY
     @PostMapping("/v1/host/createPlay")
-    public /*DefaultRes*/void createPlay(@RequestBody QuizMessage quizMessage){
-        System.out.println(hostService.createPlay(quizMessage.getQuizId()));
-        //return hostService.createPlay(quizMessage.getQuizId());
+    public DefaultRes createPlay(@RequestBody QuizMessage quizMessage){
+        return hostService.createPlay(quizMessage.getQuizId());
     }
 
     // START
