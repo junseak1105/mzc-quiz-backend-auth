@@ -10,7 +10,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class QuizMessage {
-
+    private String pinNum;
+    private String quizId;
     private QuizMessageType command;
     private String sender;
     private String quizNum;
