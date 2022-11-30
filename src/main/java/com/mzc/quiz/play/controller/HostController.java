@@ -16,12 +16,5 @@ public class HostController {
     public DefaultRes createPlay(){
         return hostService.createPlay();
     }
-
+    
 }
-
-// JWT를 통해서 SSO 로그인 인증
-// username을 -> MongoDB 조회
-// Redis 저장공간 생성
-// 1. 유저리스트 저장
-// 2. 문제별 정보 저장 -> Hash로 해도 될려나
-// 3.
