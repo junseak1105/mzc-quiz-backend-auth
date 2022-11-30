@@ -19,9 +19,7 @@ public class QreadyController {
 
     @GetMapping("/List")
     @ApiOperation(value = "ShowList", notes = "ShowList")
-    public DefaultRes GetShowList(@RequestParam("email") String email) {
-        return qreadyService.getShowList(email);
-    }
+    public DefaultRes GetShowList(@RequestParam("email") String email) {return qreadyService.getShowList(email);}
 
     @GetMapping("")
     @ApiOperation(value = "Show", notes = "Show")
