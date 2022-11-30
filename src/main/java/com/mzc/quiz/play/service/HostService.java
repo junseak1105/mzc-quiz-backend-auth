@@ -5,6 +5,7 @@ import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
 import com.mzc.quiz.play.model.QuizMessage;
 import com.mzc.quiz.play.util.RedisUtil;
+import com.mzc.quiz.show.entity.Quiz;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +25,42 @@ public class HostService {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     public void quizStart(String pin, QuizMessage quizMessage){
+        if(NullCheck(quizMessage)){
+            quizMessage.setContent("start fail (null)");
+            simpMessagingTemplate.convertAndSend("/pin/"+pin,quizMessage);
+            return;
+        }
 
+        simpMessagingTemplate.convertAndSend("/pin/"+pin, quizMessage);
     }
 
     public void quizResult(String pin, QuizMessage quizMessage){
+        if(NullCheck(quizMessage)){
+            quizMessage.setContent("start fail (null)");
+            simpMessagingTemplate.convertAndSend("/pin/"+pin,quizMessage);
+            return;
+        }
 
+        simpMessagingTemplate.convertAndSend("/pin/"+pin, quizMessage);
     }
 
     public void quizNext(String pin, QuizMessage quizMessage){
-
+        simpMessagingTemplate.convertAndSend("/pin/"+pin, quizMessage);
     }
 
     public void quizSkip(String pin, QuizMessage quizMessage){
+        simpMessagingTemplate.convertAndSend("/pin/"+pin, quizMessage);
+    }
+
+    public void quizFinal(String pin, QuizMessage quizMessage){
+        simpMessagingTemplate.convertAndSend("/pin/"+pin, quizMessage);
+    }
+
+    public void userBan(){
 
     }
+
+
 
     // 퀴즈 핀
     public DefaultRes createPlay(String quizId){
@@ -70,9 +93,10 @@ public class HostService {
         return pin;
     }
 
-
-
-
-
-
+    public boolean NullCheck(QuizMessage quizMessage){
+        if(quizMessage == null || quizMessage.getContent() == null){
+            return true;
+        }
+        return false;
+    }
 }

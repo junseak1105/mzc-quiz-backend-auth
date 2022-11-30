@@ -16,6 +16,9 @@ public enum QuizMessageType {
     USERLIST,
     TOTALNUM,
     TEACHER,
-    BAN
+    BAN,
+    RESULT,
+    SKIP,
+    FINAL
 }
 
