@@ -17,10 +17,10 @@ public class ClientController {
     ClientService clientService;
 
 
-    @MessageMapping("/join/{pin}")
+    @MessageMapping("/JOIN/{pin}")
     public void joinPlay(@DestinationVariable("pin") String pin, @Payload QuizMessage quizMessage){
         // 조인 할때마다 현재 유저 리스트를 보내주자
-
+        clientService.joinPlay(pin, quizMessage);
     }
 
     @MessageMapping("/submit/{pin}")

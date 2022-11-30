@@ -47,7 +47,7 @@ public class RedisUtil {
     }
 
     // 키 삭제
-    public Boolean deleteKey(String key){
+    public Boolean DEL(String key){
         return redisTemplate.delete(key);
     }
 
@@ -60,7 +60,7 @@ public class RedisUtil {
     }
 
     // 데이터 저장
-    public void setData(String key, String value){
+    public void SET(String key, String value){
         stringOperation.set(key,value);
     }
 
@@ -111,12 +111,12 @@ public class RedisUtil {
     // - 유저 닉네임
 
     // Set 데이터 저장
-    public void addSetData(String key, String value){
+    public void SADD(String key, String value){
         setOperations.add(key, value);
     }
 
     // Set 데이터 삭제
-    public Long removeSetData(String key, String value){
+    public Long SPOP(String key, String value){
         return setOperations.remove(key, value);
     }
 
@@ -126,12 +126,16 @@ public class RedisUtil {
     }
 
     // Set 데이터 전부 가져오기
-    public Set<String> getAllSetData(String key){
+    public Set<String> SMEMBERS(String key){
         return setOperations.members(key);
     }
 
-    // Set 데이터에 키값이 있는지 체크
-    public boolean hasSetData(String key, String value) {
+    
+    // Set - Returns if member is a member of the set stored at key.
+    // true - exist
+    // false - not exist
+    public boolean SISMEMBER(String key, String value) {
+
         return setOperations.isMember(key, value);
     }
     // -------------------------------------------------------------

@@ -47,7 +47,7 @@ public class HostService {
                 log.info("PIN 번호 생성 중 중복 발생");
             }else{
                 log.info("PIN 생성 완료");
-                redisUtil.addSetData(playKey, playKey);
+                redisUtil.SADD(playKey, playKey);
                 redisUtil.expire(playKey, 12, TimeUnit.HOURS);  // 하루만 유지??
                 break;
             }

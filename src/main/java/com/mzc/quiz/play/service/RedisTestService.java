@@ -42,7 +42,7 @@ public class RedisTestService {
     public void RedisUtilTest(int pin, QuizMessage quizMessage){
         String key = "UserList:"+pin;
         String value = quizMessage.getSender();
-        redisUtil.setData(key, value);
+        redisUtil.SET(key, value);
 
         log.info("Redis get :" + redisUtil.getData(key));
     }

@@ -16,7 +16,7 @@ public class HostController {
     public DefaultRes createPlay(){
         return hostService.createPlay();
     }
-
+    
 }
 
 // JWT를 통해서 SSO 로그인 인증
