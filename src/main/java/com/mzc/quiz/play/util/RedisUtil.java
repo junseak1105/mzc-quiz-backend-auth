@@ -42,6 +42,7 @@ public class RedisUtil {
         return redisTemplate.hasKey(key);
     }
 
+
     public Boolean expire(String key, long expireTime, TimeUnit timeUnit){
         return redisTemplate.expire(key, expireTime, timeUnit);
     }
@@ -130,7 +131,7 @@ public class RedisUtil {
         return setOperations.members(key);
     }
 
-    
+
     // Set - Returns if member is a member of the set stored at key.
     // true - exist
     // false - not exist
