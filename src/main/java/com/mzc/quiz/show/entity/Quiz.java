@@ -13,6 +13,6 @@ public class Quiz {
     private Choice choiceList;
     private List<String> answer;
     private int time;
-    private boolean userScore;
+    private boolean useScore;
     private double rate;
 }
