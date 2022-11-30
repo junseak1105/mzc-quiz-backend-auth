@@ -1,4 +1,4 @@
-package com.mzc.quiz.play.model.websocket;
+package com.mzc.quiz.play.model;
 
 public enum QuizMessageType {
     CREATEPLAY,

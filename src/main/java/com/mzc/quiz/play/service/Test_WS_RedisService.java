@@ -1,6 +1,6 @@
 package com.mzc.quiz.play.service;
 
-import com.mzc.quiz.play.model.websocket.QuizMessage;
+import com.mzc.quiz.play.model.QuizMessage;
 import com.mzc.quiz.play.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class RedisTestService {
+public class Test_WS_RedisService {
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
