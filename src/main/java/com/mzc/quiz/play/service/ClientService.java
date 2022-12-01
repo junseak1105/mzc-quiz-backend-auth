@@ -41,11 +41,12 @@ public class ClientService {
             return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.BAD_REQUEST);
         }else{
             redisUtil.SADD(playKey, username);
+            simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
             return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS, quizMessage);
         }
 //        Set<String> userListSet = redisUtil.SMEMBERS(playKey);
 //
-//        simpMessagingTemplate.convertAndSend("/pin/"+pin, resMessage);
+
     }
 
     public void joinPlay(String pin, QuizMessage quizMessage){
