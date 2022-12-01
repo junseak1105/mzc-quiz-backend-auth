@@ -8,9 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class Submit {
-    private String selected;
-    private String totalElapsedTime;
-    private String ans;
+    private String answerTime; // 문제를 푼 시간
+    private String answer; // 유저가 선택한 답안
 }
 /*
 1. Submit 메시지 양식

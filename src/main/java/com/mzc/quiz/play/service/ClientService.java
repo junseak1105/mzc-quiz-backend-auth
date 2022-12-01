@@ -33,7 +33,7 @@ public class ClientService {
 
     public DefaultRes setNickname(QuizMessage quizMessage){
         String playKey = redisUtil.genKey(quizMessage.getPinNum());
-        String username = quizMessage.getSender();
+        String username = quizMessage.getNickName();
         // Set 조회해서 -> content에 넣어서 보내기
 
         if(redisUtil.SISMEMBER(playKey, username)){
@@ -45,32 +45,5 @@ public class ClientService {
             return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS, quizMessage);
         }
 //        Set<String> userListSet = redisUtil.SMEMBERS(playKey);
-//
-
     }
-
-    public void joinPlay(String pin, QuizMessage quizMessage){
-        QuizMessage resMessage = new QuizMessage();
-
-        String playKey = redisUtil.genKey(pin);
-        String username = quizMessage.getSender();
-        // Set 조회해서 -> content에 넣어서 보내기
-
-
-        if(redisUtil.SISMEMBER(playKey, username)){
-            // 닉네임 중복
-            resMessage.setCommand(QuizMessageType.RETRYJOIN);
-        }else{
-            redisUtil.SADD(playKey, username);
-            resMessage.setCommand(QuizMessageType.JOINOK);
-        }
-
-        Set<String> userListSet = redisUtil.SMEMBERS(playKey);
-        resMessage.setContent(userListSet);
-
-        simpMessagingTemplate.convertAndSend("/pin/"+pin, resMessage);
-
-    }
-
-
 }
