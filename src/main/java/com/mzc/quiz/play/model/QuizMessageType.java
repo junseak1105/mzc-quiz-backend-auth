@@ -19,6 +19,7 @@ public enum QuizMessageType {
     BAN,
     RESULT,
     SKIP,
-    FINAL
+    FINAL,
+    WAIT
 }
 
