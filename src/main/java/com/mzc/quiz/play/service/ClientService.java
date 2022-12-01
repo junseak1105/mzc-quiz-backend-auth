@@ -3,6 +3,7 @@ package com.mzc.quiz.play.service;
 import com.mzc.global.Response.DefaultRes;
 import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
+import com.mzc.quiz.play.model.QuizCommandType;
 import com.mzc.quiz.play.model.QuizMessage;
 import com.mzc.quiz.play.model.QuizMessageType;
 import com.mzc.quiz.play.util.RedisUtil;
@@ -41,6 +42,7 @@ public class ClientService {
             return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.BAD_REQUEST);
         }else{
             redisUtil.SADD(playKey, username);
+            quizMessage.setCommand(QuizCommandType.WAIT);
             simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
             return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS, quizMessage);
         }

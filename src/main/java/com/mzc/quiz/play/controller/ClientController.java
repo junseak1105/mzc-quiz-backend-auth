@@ -26,10 +26,10 @@ public class ClientController {
         return clientService.setNickname(quizMessage);
     }
 
-    @MessageMapping("/JOIN/{pin}")
-    public void joinPlay(@DestinationVariable("pin") String pin, @Payload QuizMessage quizMessage){
-        clientService.joinPlay(pin, quizMessage);
-    }
+//    @MessageMapping("/JOIN/{pin}")
+//    public void joinPlay(@DestinationVariable("pin") String pin, @Payload QuizMessage quizMessage){
+//        clientService.joinPlay(pin, quizMessage);
+//    }
 
     @MessageMapping("/submit/{pin}")
     public void submitPerQuestion(@DestinationVariable("pin") int pin, @Payload QuizMessage quizMessage){

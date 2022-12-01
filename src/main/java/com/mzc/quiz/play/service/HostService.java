@@ -34,26 +34,37 @@ public class HostService {
         simpMessagingTemplate.convertAndSend("/pin/"+pin, quizMessage);
     }
 
-    public void quizResult(String pin, QuizMessage quizMessage){
+
+    public void quizStart(QuizMessage quizMessage){
         if(NullCheck(quizMessage)){
             quizMessage.setContent("start fail (null)");
-            simpMessagingTemplate.convertAndSend("/pin/"+pin,quizMessage);
+            simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(),quizMessage);
+            return;
+        }
+        System.out.println();
+        simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
+    }
+
+    public void quizResult(QuizMessage quizMessage){
+        if(NullCheck(quizMessage)){
+            quizMessage.setContent("start fail (null)");
+            simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(),quizMessage);
             return;
         }
 
-        simpMessagingTemplate.convertAndSend("/pin/"+pin, quizMessage);
+        simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
     }
 
-    public void quizNext(String pin, QuizMessage quizMessage){
-        simpMessagingTemplate.convertAndSend("/pin/"+pin, quizMessage);
+    public void quizNext(QuizMessage quizMessage){
+        simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
     }
 
-    public void quizSkip(String pin, QuizMessage quizMessage){
-        simpMessagingTemplate.convertAndSend("/pin/"+pin, quizMessage);
+    public void quizSkip(QuizMessage quizMessage){
+        simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
     }
 
-    public void quizFinal(String pin, QuizMessage quizMessage){
-        simpMessagingTemplate.convertAndSend("/pin/"+pin, quizMessage);
+    public void quizFinal(QuizMessage quizMessage){
+        simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
     }
 
     public void userBan(){

@@ -23,44 +23,45 @@ public class HostController {
         return hostService.createPlay(quizMessage.getQuizId());
     }
 
+
     // START
     // - 클라이언트에 퀴즈 시작 명령어 전송
-    @MessageMapping("/START/{pin}")
-    public void quizStart(@DestinationVariable("pin") String pin, @RequestBody QuizMessage quizMessage){
-        hostService.quizStart(pin, quizMessage);
+    @MessageMapping("/start")
+    public void quizStart(@RequestBody QuizMessage quizMessage){
+        hostService.quizStart(quizMessage);
     }
 
     // RESULT
     // - 클라이언트에 현재 퀴즈 결과 명령어 전송
-    @MessageMapping("/RESULT/{pin}")
-    public void quizResult(@DestinationVariable("pin") String pin, @RequestBody QuizMessage quizMessage){
-        hostService.quizResult(pin, quizMessage);
+    @MessageMapping("/result")
+    public void quizResult(@RequestBody QuizMessage quizMessage){
+        hostService.quizResult(quizMessage);
     }
 
     // NEXT
     // - 클라이언트에 다음문제로 이동 명령어 전송
-    @MessageMapping("/NEXT/{pin}")
-    public void quizNext(@DestinationVariable("pin") String pin, @RequestBody QuizMessage quizMessage){
-        hostService.quizNext(pin, quizMessage);
+    @MessageMapping("/next")
+    public void quizNext( @RequestBody QuizMessage quizMessage){
+        hostService.quizNext(quizMessage);
     }
 
     // SKIP
     // - 클라이언트에 다음문제 스킵 명령어 전송
-    @MessageMapping("/SKIP/{pin}")
-    public void quizSkip(@DestinationVariable("pin") String pin, @RequestBody QuizMessage quizMessage){
-        hostService.quizSkip(pin, quizMessage);
+    @MessageMapping("/skip")
+    public void quizSkip(@RequestBody QuizMessage quizMessage){
+        hostService.quizSkip(quizMessage);
     }
 
     // FINAL
     // - 클라이언트에 최종 퀴즈 결과 명령어 전송
-    @MessageMapping("/FINAL/{pin}")
-    public void quizFinal(@DestinationVariable("pin") String pin, @RequestBody QuizMessage quizMessage){
-        hostService.quizFinal(pin, quizMessage);
+    @MessageMapping("/final")
+    public void quizFinal(@RequestBody QuizMessage quizMessage){
+        hostService.quizFinal(quizMessage);
     }
 
     // BAN
     // - 특정 유저 강퇴
-    @MessageMapping("/BAN/{pin}")
+    @MessageMapping("/ban")
     @SendToUser("/queue/session")
     public void userBan(){
         hostService.userBan();
