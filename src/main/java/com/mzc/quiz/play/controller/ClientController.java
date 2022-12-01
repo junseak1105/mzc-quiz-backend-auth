@@ -31,10 +31,9 @@ public class ClientController {
 //        clientService.joinPlay(pin, quizMessage);
 //    }
 
-    @MessageMapping("/submit/{pin}")
-    public void submitPerQuestion(@DestinationVariable("pin") int pin, @Payload QuizMessage quizMessage){
-//        clientService.submitPerResult(pin, quizMessage);
-
+    @MessageMapping("/submit")
+    public void submitPerQuestion(@Payload QuizMessage quizMessage){
+        clientService.submitPerResult(quizMessage);
     }
 
 }

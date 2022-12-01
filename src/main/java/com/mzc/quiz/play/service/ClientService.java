@@ -48,4 +48,11 @@ public class ClientService {
         }
 //        Set<String> userListSet = redisUtil.SMEMBERS(playKey);
     }
+
+    public void submitPerResult( QuizMessage quizMessage) {
+        String AnsKey = redisUtil.genKey_ans(quizMessage.getPinNum(), quizMessage.getQuizNum());
+
+        redisUtil.setZData(AnsKey, quizMessage.getNickName(), quizMessage.getSubmit().getScore());
+
+    }
 }
