@@ -31,6 +31,22 @@ public class ClientService {
         }
     };
 
+    public DefaultRes setNickname(QuizMessage quizMessage){
+        String playKey = redisUtil.genKey(quizMessage.getPinNum());
+        String username = quizMessage.getSender();
+        // Set 조회해서 -> content에 넣어서 보내기
+
+        if(redisUtil.SISMEMBER(playKey, username)){
+            // 닉네임 중복
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.BAD_REQUEST);
+        }else{
+            redisUtil.SADD(playKey, username);
+            return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS, quizMessage);
+        }
+//        Set<String> userListSet = redisUtil.SMEMBERS(playKey);
+//
+//        simpMessagingTemplate.convertAndSend("/pin/"+pin, resMessage);
+    }
 
     public void joinPlay(String pin, QuizMessage quizMessage){
         QuizMessage resMessage = new QuizMessage();

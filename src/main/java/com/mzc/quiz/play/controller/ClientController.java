@@ -21,9 +21,13 @@ public class ClientController {
         return clientService.joinRoom(quizMessage);
     }
 
+    @MessageMapping("/setnickname")
+    public DefaultRes setNickname(@RequestBody QuizMessage quizMessage){
+        return clientService.setNickname(quizMessage);
+    }
+
     @MessageMapping("/JOIN/{pin}")
     public void joinPlay(@DestinationVariable("pin") String pin, @Payload QuizMessage quizMessage){
-        System.out.println(quizMessage);
         clientService.joinPlay(pin, quizMessage);
     }
 
