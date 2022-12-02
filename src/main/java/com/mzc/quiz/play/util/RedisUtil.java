@@ -4,6 +4,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -17,6 +18,7 @@ public class RedisUtil {
     private HashOperations<String, Object, Object> hashOperations;
     private SetOperations<String, String> setOperations;
     private ZSetOperations<String, String> zSetOperations;
+    private ListOperations<String,String> listOperations;
 
     public RedisUtil(RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -24,6 +26,7 @@ public class RedisUtil {
         this.hashOperations = redisTemplate.opsForHash();
         this.setOperations = redisTemplate.opsForSet();
         this.zSetOperations = redisTemplate.opsForZSet();
+        this.listOperations = redisTemplate.opsForList();
     }
 
     // [ Gen Key ]
@@ -180,5 +183,14 @@ public class RedisUtil {
     public Long removeZData(String key, Object value) {
         return zSetOperations.remove(key, value);
     }
+
+    // -------------------------------------------------------------
+
+    // [ List ]
+    // - 유저의 모든 로그 저장
+    public List leftPop(String key, long count){
+        return listOperations.leftPop(key,count);
+    }
+
 
 }

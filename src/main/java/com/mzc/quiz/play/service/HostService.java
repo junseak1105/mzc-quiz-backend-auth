@@ -57,6 +57,12 @@ public class HostService {
     }
 
     public void quizResult(QuizMessage quizMessage){
+
+        String quizKey = redisUtil.genKey("LOG", quizMessage.getPinNum());
+        redisUtil.leftPop(quizKey,5); // List<V> leftPop(K key, long count) 사용하면 될듯
+
+        quizMessage.setCommand(QuizCommandType.RESULT);
+        quizMessage.setAction(QuizActionType.COMMAND);
         simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
     }
 
@@ -72,6 +78,10 @@ public class HostService {
     }
 
     public void quizFinal(QuizMessage quizMessage){
+
+        redisUtil.genKey("LOG", quizMessage.getPinNum());
+        quizMessage.setCommand(QuizCommandType.FINAL);
+        quizMessage.setAction(QuizActionType.COMMAND);
         simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
     }
 
