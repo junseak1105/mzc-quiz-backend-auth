@@ -76,9 +76,25 @@ public class HostService {
     }
 
     public void userBan(QuizMessage quizMessage){
-        simpMessagingTemplate.convertAndSend("/queue/");
-    }
+        String pin = quizMessage.getPinNum();
+        String key = redisUtil.genKey("PLAY", pin);
+        String nickname = quizMessage.getNickName();
+        Long srem = redisUtil.SREM(key, nickname);
 
+        if(srem == 1){
+            QuizMessage resMessage = new QuizMessage();
+            resMessage.setPinNum(quizMessage.getPinNum());
+            resMessage.setCommand(QuizCommandType.KICK);
+            resMessage.setAction(QuizActionType.COMMAND);
+            resMessage.setNickName(nickname);
+            System.out.println(getUserList(pin));
+            simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), resMessage) ;
+        }else if(srem == 0){
+            System.out.printf("해당 key 값이 없습니다.");
+        }else{
+            System.out.println("저장된 값이 집합이 아닙니다.");
+        }
+    }
 
     public String[] getUserList(String pinNum){
         Set<String> userList = redisUtil.SMEMBERS("PLAY:"+pinNum);

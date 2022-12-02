@@ -138,6 +138,12 @@ public class RedisUtil {
         return setOperations.members(key);
     }
 
+    // 삭제된 member수를 리턴, 버전 2.4 이후 부터 여러 개의 member를 받을 수 있다
+    // key에 저장된 집합에서 지정된 멤버를 제거, 해당 멤버가 아닌 경우 무시됨,
+    // key가 없으면 빈 세트로 처리되고 명령은 0을 리턴, key에 저장된 값이 집합이 아닌 경우 오류 반환
+    public Long SREM(String key, String nickname) {
+        return setOperations.remove(key,nickname);
+    }
 
     // Set - Returns if member is a member of the set stored at key.
     // true - exist
@@ -174,4 +180,5 @@ public class RedisUtil {
     public Long removeZData(String key, Object value) {
         return zSetOperations.remove(key, value);
     }
+
 }
