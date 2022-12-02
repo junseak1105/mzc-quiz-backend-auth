@@ -24,7 +24,6 @@ public class RedisUtil {
         this.hashOperations = redisTemplate.opsForHash();
         this.setOperations = redisTemplate.opsForSet();
         this.zSetOperations = redisTemplate.opsForZSet();
-
     }
 
     // [ Gen Key ]
@@ -39,6 +38,9 @@ public class RedisUtil {
         return "ANS" + quizNum + ":" + pin;
     }
 
+    public String genKey(String name, String pin){
+        return name + ":" + pin;
+    }
 
     // --------------------------------------------------------------------------
     // [ Generic ]

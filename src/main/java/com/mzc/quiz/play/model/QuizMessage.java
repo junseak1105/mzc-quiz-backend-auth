@@ -21,7 +21,6 @@ public class QuizMessage {
     private Quiz quiz;
     //SUBMIT
     private Submit submit;
-
 }
 
 

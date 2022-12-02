@@ -1,8 +1,10 @@
 package com.mzc.quiz.play.service;
 
+import com.google.gson.Gson;
 import com.mzc.global.Response.DefaultRes;
 import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
+import com.mzc.quiz.play.model.Quiz;
 import com.mzc.quiz.play.model.QuizCommandType;
 import com.mzc.quiz.play.model.QuizMessage;
 import com.mzc.quiz.play.repository.QplayRepository;
@@ -31,9 +33,25 @@ public class HostService {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-    public void quizStart(QuizMessage quizMessage){
-        quizMessage.setCommand(QuizCommandType.START);
-        simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
+    public void quizStart(QuizMessage quizMessage) {
+        String quizKey = redisUtil.genKey("META", quizMessage.getPinNum());
+        if(redisUtil.hasKey(quizKey)) {
+            int currentQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey,"currentQuiz").toString());
+
+            //String quizData = redisUtil.GetHashData(quizKey,"p"+currentQuiz).toString();
+            //System.out.println(quizData);
+            String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey,"p"+currentQuiz).toString()));
+
+            Gson gson = new Gson();
+            Quiz quiz = gson.fromJson(QuizDataToString, Quiz.class);
+            quiz.setAnswer(null);
+
+            quizMessage.setCommand(QuizCommandType.START);
+            quizMessage.setQuiz(quiz);
+            simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
+        }else {
+
+        }
     }
 
     public void quizResult(QuizMessage quizMessage){
@@ -83,18 +101,28 @@ public class HostService {
         while(true){
             pin = RandomStringUtils.randomNumeric(6);
             String playKey = redisUtil.genKey(pin);
+            String quizKey = redisUtil.genKey("META", pin);
 
             if( redisUtil.hasKey(playKey) ){
                 // 다시 생성
             }else{
                 Show show = qplayRepository.findShowById(quizId);
+                Gson gson = new Gson();
 
-                String base64QuizData = Base64.getEncoder().encodeToString(show.getQuizData().toString().getBytes());
 
-                System.out.println(show);
+                //String base64QuizData = Base64.getEncoder().encodeToString(json.getBytes());
+
+                //System.out.println(json);
 
                 if(show != null){
-                    redisUtil.SADD("META:"+pin, base64QuizData);
+                    redisUtil.setHashData(quizKey, "currentQuiz", "1");
+                    redisUtil.setHashData(quizKey, "lastQuiz", Integer.toString(show.getQuizData().size()));
+                    for(int i=0; i<show.getQuizData().size();i++){
+                        //String json = gson.toJson(show.getQuizData().get(i));
+                        String base64QuizData = Base64.getEncoder().encodeToString(gson.toJson(show.getQuizData().get(i)).getBytes());
+                        redisUtil.setHashData(quizKey, "p"+(i+1) ,base64QuizData);
+                    }
+
                 }
                 else{
                     return "퀴즈데이터가 정상적으로 저장되지 않았습니다.";
