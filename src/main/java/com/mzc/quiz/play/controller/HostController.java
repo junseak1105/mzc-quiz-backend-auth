@@ -2,6 +2,7 @@ package com.mzc.quiz.play.controller;
 
 import com.mzc.global.Response.DefaultRes;
 import com.mzc.quiz.play.model.QuizMessage;
+import com.mzc.quiz.play.model.Show;
 import com.mzc.quiz.play.service.HostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,8 +19,8 @@ public class HostController {
 
     // CREATEPLAY
     @PostMapping("/v1/host/createPlay")
-    public DefaultRes createPlay(@RequestBody QuizMessage quizMessage){
-        return hostService.createPlay(quizMessage.getQuizId());
+    public DefaultRes createPlay(@RequestBody Show show){
+        return hostService.createPlay(show.getId());
     }
 
     @PostMapping("/v1/host/getUserList")

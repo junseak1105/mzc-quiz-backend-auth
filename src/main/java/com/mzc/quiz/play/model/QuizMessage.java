@@ -2,8 +2,6 @@ package com.mzc.quiz.play.model;
 
 // WebSocket 통신용 Message model
 
-import com.mzc.quiz.play.model.content.Ban;
-import com.mzc.quiz.play.model.content.Submit;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,14 +10,17 @@ import lombok.ToString;
 @Getter
 @ToString
 public class QuizMessage {
+    //공통
     private String pinNum;
-    private String quizId;
     private QuizCommandType command;
-    private String nickName;
-    private String quizNum;
+    private QuizActionType action; //enum으로 변경
+
+    //type에 따른 분기
+    //submit
     private Submit submit;
-    private Ban ban;
-    private Object content;
+    //Ban
+    private String nickName;
+
 }
 
 

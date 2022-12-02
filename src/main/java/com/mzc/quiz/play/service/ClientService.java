@@ -5,15 +5,10 @@ import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
 import com.mzc.quiz.play.model.QuizCommandType;
 import com.mzc.quiz.play.model.QuizMessage;
-import com.mzc.quiz.play.model.QuizMessageType;
 import com.mzc.quiz.play.util.RedisUtil;
-import com.mzc.quiz.show.entity.Quiz;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -23,13 +18,14 @@ public class ClientService {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
     public DefaultRes joinRoom(QuizMessage quizMessage){
-        String pin = redisUtil.genKey(quizMessage.getPinNum());
-        if(redisUtil.hasKey(pin)){
-            quizMessage.setQuizId(redisUtil.SMEMBERS(pin).toString());
-            return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS, quizMessage);
-        }else{
-            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessages.BAD_REQUEST);
-        }
+//        String pin = redisUtil.genKey(quizMessage.getPinNum());
+//        if(redisUtil.hasKey(pin)){
+//            quizMessage.setQuizId(redisUtil.SMEMBERS(pin).toString());
+//            return DefaultRes.res(StatusCode.OK, ResponseMessages.SUCCESS, quizMessage);
+//        }else{
+//            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessages.BAD_REQUEST);
+//        }
+        return null;
     };
 
     public DefaultRes setNickname(QuizMessage quizMessage){
@@ -50,9 +46,9 @@ public class ClientService {
     }
 
     public void submit(QuizMessage quizMessage) {
-        String AnsKey = redisUtil.genKey_ans(quizMessage.getPinNum(), quizMessage.getQuizNum());
-
-        redisUtil.setZData(AnsKey, quizMessage.getNickName(), quizMessage.getSubmit().getScore());
+//        String AnsKey = redisUtil.genKey_ans(quizMessage.getPinNum(), quizMessage.getQuizNum());
+//
+//        redisUtil.setZData(AnsKey, quizMessage.getNickName(), quizMessage.getSubmit().getScore());
 
     }
 }

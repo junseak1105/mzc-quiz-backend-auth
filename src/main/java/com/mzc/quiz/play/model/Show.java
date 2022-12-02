@@ -1,5 +1,6 @@
 package com.mzc.quiz.play.model;
 
+import com.mzc.quiz.show.entity.QuizInfo;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Document("show")
-
 public class Show {
     @Id
     private String id;

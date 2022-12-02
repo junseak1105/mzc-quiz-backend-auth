@@ -109,9 +109,9 @@ public class HostService {
     }
 
     public boolean NullCheck(QuizMessage quizMessage){
-        if(quizMessage == null || quizMessage.getContent() == null){
-            return true;
-        }
+//        if(quizMessage == null || quizMessage.getContent() == null){
+//            return true;
+//        }
         return false;
     }
 }
