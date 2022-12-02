@@ -47,6 +47,7 @@ public class HostService {
             Quiz quiz = gson.fromJson(QuizDataToString, Quiz.class);
             quiz.setAnswer(null);
 
+            quizMessage.setAction(QuizActionType.COMMAND);
             quizMessage.setCommand(QuizCommandType.START);
             quizMessage.setQuiz(quiz);
             simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
