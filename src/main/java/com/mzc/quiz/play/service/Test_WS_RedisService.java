@@ -35,7 +35,7 @@ public class Test_WS_RedisService {
         String key = "pin:"+pin;
         String value = quizMessage.getNickName();
         vop.set(key, value);
-        log.info("quiz message : "+quizMessage.getContent());
+//        log.info("quiz message : "+quizMessage.getContent());
         log.info("Redis get " + vop.get(key));
     }
 
