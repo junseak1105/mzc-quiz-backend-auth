@@ -3,6 +3,7 @@ package com.mzc.quiz.play.controller;
 import com.mzc.global.Response.DefaultRes;
 import com.mzc.quiz.play.model.QuizMessage;
 import com.mzc.quiz.play.service.HostService;
+import com.mzc.quiz.show.entity.Quiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -10,6 +11,9 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Set;
 
 @RestController
 public class HostController {
@@ -23,6 +27,10 @@ public class HostController {
         return hostService.createPlay(quizMessage.getQuizId());
     }
 
+    @PostMapping("/v1/host/getUserList")
+    public String[] getUserList(@RequestBody QuizMessage quizMessage){
+        return hostService.getUserList(quizMessage.getPinNum());
+    }
 
     // START
     // - 클라이언트에 퀴즈 시작 명령어 전송
@@ -63,7 +71,7 @@ public class HostController {
     // - 특정 유저 강퇴
     @MessageMapping("/ban")
     @SendToUser("/queue/session")
-    public void userBan(){
-        hostService.userBan();
+    public void userBan(@RequestBody QuizMessage quizMessage){
+        hostService.userBan(quizMessage);
     }
 }

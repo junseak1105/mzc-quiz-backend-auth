@@ -25,7 +25,7 @@ public class ClientController {
     public DefaultRes setNickname(@RequestBody QuizMessage quizMessage){
         return clientService.setNickname(quizMessage);
     }
-
+    /*
 //    @MessageMapping("/JOIN/{pin}")
 //    public void joinPlay(@DestinationVariable("pin") String pin, @Payload QuizMessage quizMessage){
 //        clientService.joinPlay(pin, quizMessage);
@@ -34,6 +34,6 @@ public class ClientController {
     @MessageMapping("/submit")
     public void submitPerQuestion(@Payload QuizMessage quizMessage){
         clientService.submitPerResult(quizMessage);
-    }
+    }*/
 
 }
