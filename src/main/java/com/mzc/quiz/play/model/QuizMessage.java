@@ -13,14 +13,14 @@ public class QuizMessage {
     //공통
     private String pinNum;
     private QuizCommandType command;
-    private QuizActionType action; //enum으로 변경
+    private QuizActionType action;
+    private String nickName;//Ban, setNickname
 
     //type에 따른 분기
-    //submit
+    //COMMAND
+    private Quiz quiz;
+    //SUBMIT
     private Submit submit;
-    //Ban
-    private String nickName;
-
 }
 
 

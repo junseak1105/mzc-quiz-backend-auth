@@ -17,7 +17,7 @@ public class HostController {
     @Autowired
     private HostService hostService;
 
-    // CREATEPLAY
+
     @PostMapping("/v1/host/createPlay")
     public DefaultRes createPlay(@RequestBody Show show){
         return hostService.createPlay(show.getId());
