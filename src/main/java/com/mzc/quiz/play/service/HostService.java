@@ -40,9 +40,6 @@ public class HostService {
         simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
     }
 
-    public void quizNext(QuizMessage quizMessage){
-        simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
-    }
 
     public void quizSkip(QuizMessage quizMessage){
         simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), quizMessage);
