@@ -89,7 +89,7 @@ public class HostService {
         String pin = quizMessage.getPinNum();
         String key = redisUtil.genKey("PLAY", pin);
         String nickname = quizMessage.getNickName();
-        // Long srem = redisUtil.SREM(key, nickname);
+        System.out.printf(nickname);
 
         if(redisUtil.SREM(key, nickname) == 1){
             QuizMessage resMessage = new QuizMessage();
@@ -100,8 +100,12 @@ public class HostService {
             System.out.println(getUserList(pin));
             simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), resMessage) ;
         }else{
-            System.out.printf("해당 key 값이 없습니다.");
-            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), "해당 key 값이 없습니다.");
+            QuizMessage resMessage = new QuizMessage();
+            resMessage.setPinNum(quizMessage.getPinNum());
+            resMessage.setCommand(QuizCommandType.KICK);
+            resMessage.setAction(QuizActionType.COMMAND);
+            resMessage.setNickName(nickname);
+            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), resMessage + "존재하지 않습니다");
         }
     }
 
