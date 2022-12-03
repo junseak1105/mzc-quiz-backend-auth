@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Base64;
 
 @Service
@@ -32,9 +33,8 @@ public class ClientService {
         }
     }
 
-    ;
 
-    public void setNickname(QuizMessage quizMessage) {
+    public void setNickname(Principal principal, QuizMessage quizMessage) {
         String playKey = redisUtil.genKey(quizMessage.getPinNum());
         String username = quizMessage.getNickName();
         // Set 조회해서 -> content에 넣어서 보내기
@@ -50,7 +50,10 @@ public class ClientService {
             redisUtil.SADD(playKey, username);
             quizMessage.setAction(QuizActionType.COMMAND);
             quizMessage.setCommand(QuizCommandType.WAIT);
-            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
+            // 보낸 유저한테만 다시 보내주고
+            simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/queue/" + quizMessage.getPinNum(), quizMessage);
+            // 변경된 유저 목록은 브로드캐스트로 알려주고
+            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), "123123");
         }
     }
 

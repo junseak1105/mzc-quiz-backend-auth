@@ -12,6 +12,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 public class ClientController {
 
@@ -27,8 +29,8 @@ public class ClientController {
     }
 
     @MessageMapping("/setnickname")
-    public void setNickname(@RequestBody QuizMessage quizMessage){
-        clientService.setNickname(quizMessage);
+    public void setNickname( Principal principal, @RequestBody QuizMessage quizMessage){
+        clientService.setNickname(principal, quizMessage);
     }
 
     @MessageMapping("/submit")
