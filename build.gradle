@@ -34,18 +34,13 @@ dependencies {
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    testImplementation 'it.ozimov:embedded-redis:0.7.3'
 
-
+    // Random
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
+    // Gson
     implementation 'com.google.code.gson:gson:2.8.6'
 
-/*    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
-    implementation group: 'com.querydsl', name: 'querydsl-jpa', version: '5.0.0'
-    // https://mvnrepository.com/artifact/com.querydsl/querydsl-apt
-    implementation group: 'com.querydsl', name: 'querydsl-apt', version: '5.0.0'*/
 
     // swagger
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
@@ -59,6 +54,10 @@ dependencies {
     // websocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.webjars:stomp-websocket:2.3.3-1'
+}
+
+configurations.all {
+    exclude module: 'slf4j-simple'
 }
 
 tasks.named('test') {
