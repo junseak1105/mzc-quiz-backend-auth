@@ -95,12 +95,24 @@ public class HostService {
     public void quizSkip(QuizMessage quizMessage) {
         String quizKey = redisUtil.genKey("META", quizMessage.getPinNum());
 
-        String currentQuiz = Integer.toString(Integer.parseInt(redisUtil.GetHashData(quizKey, "currentQuiz").toString()) + 1);
-        redisUtil.setHashData(quizKey, "currentQuiz", currentQuiz);
+        int currentQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey, "currentQuiz").toString());
+        int lastQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey,"lastQuiz").toString());
 
-        quizMessage.setCommand(QuizCommandType.RESULT);
-        quizMessage.setAction(QuizActionType.COMMAND);
-        simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
+        System.out.println("last" + lastQuiz);
+
+        // 마지막 문제에서 final로 안감 체크 필요
+        if(currentQuiz < lastQuiz){
+            System.out.println("current" + currentQuiz);
+            currentQuiz++;
+            redisUtil.setHashData(quizKey, "currentQuiz", Integer.toString(currentQuiz));
+            quizStart(quizMessage);
+        }else{
+            quizFinal(quizMessage);
+        }
+
+//        quizMessage.setCommand(QuizCommandType.START);
+//        quizMessage.setAction(QuizActionType.COMMAND);
+//        simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
     }
 
     public void quizFinal(QuizMessage quizMessage) {
