@@ -87,6 +87,10 @@ public class HostService {
 
         quizMessage.setRank(RankingList);
 
+        // 마지막 문제 체크해서 final로 이동해야함.
+        // 아직 터짐
+        redisUtil.setHashData(quizKey_1,"currentQuiz", Integer.toString(quizMessage.getQuiz().getNum()+1));
+
         quizMessage.setCommand(QuizCommandType.RESULT);
         quizMessage.setAction(QuizActionType.COMMAND);
         simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
@@ -100,7 +104,6 @@ public class HostService {
 
         System.out.println("last" + lastQuiz);
 
-        // 마지막 문제에서 final로 안감 체크 필요
         if(currentQuiz < lastQuiz){
             System.out.println("current" + currentQuiz);
             currentQuiz++;
