@@ -88,16 +88,25 @@ public class ClientService {
             }
         }
 
+        System.out.println("TotalTime : " + TotalTime);
+        System.out.println("AnswerTime : " + AnswerTime);
+        System.out.println("Rate : " + Rate);
+        System.out.println("isCorrect : " + isCorrect);
+
         double Score = ((TotalTime - AnswerTime) / TotalTime) * 1000 * Rate * isCorrect;
+
+        System.out.println(Score);
 
         // Result:키값 시작할 때 먼저 생성해놓는게 좋겠죠?
         // 랭킹점수 증가
         String resultKey = redisUtil.genKey("RESULT", quizMessage.getPinNum());
         // 해당 키가 존재하는지 체크
         if(redisUtil.hasKey(resultKey)){ // 있으면 점수 증가
+            System.out.println("HasKey");
             redisUtil.plusScore(resultKey, quizMessage.getNickName(), Score);
         }
         else{ // 없으면
+            System.out.println("noHasKey");
             redisUtil.setZData(resultKey, quizMessage.getNickName(), Score);
         }
     }

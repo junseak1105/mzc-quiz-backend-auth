@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.mzc.global.Response.DefaultRes;
 import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
-import com.mzc.quiz.play.model.Quiz;
-import com.mzc.quiz.play.model.QuizActionType;
-import com.mzc.quiz.play.model.QuizCommandType;
-import com.mzc.quiz.play.model.QuizMessage;
+import com.mzc.quiz.play.model.*;
 import com.mzc.quiz.play.repository.QplayRepository;
 import com.mzc.quiz.play.util.RedisUtil;
 import com.mzc.quiz.show.entity.Show;
@@ -18,8 +15,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -74,10 +70,22 @@ public class HostService {
 
         // 랭킹 점수
         String resultKey = redisUtil.genKey("RESULT", quizMessage.getPinNum());
-        long userCount = redisUtil.hashDataSize(redisUtil.genKey("PLAY", quizMessage.getPinNum()));
+        long userCount = redisUtil.setDataSize(redisUtil.genKey("PLAY", quizMessage.getPinNum()));
         Set<ZSetOperations.TypedTuple<String>> ranking = redisUtil.getRanking(resultKey, 0, userCount);
 
-        // ZSetOperations.TypedTuple<String> 이거 어캐사용하는거죠..?
+        Iterator<ZSetOperations.TypedTuple<String>> iterRank = ranking.iterator();
+        List<UserRank> RankingList = new ArrayList<>();
+        int rank=1;
+        while(iterRank.hasNext()){
+            ZSetOperations.TypedTuple<String> rankData = iterRank.next();
+            RankingList.add(new UserRank(rank, rankData.getValue(), rankData.getScore()));
+            System.out.println("rank : "+rank+", NickName : "+ rankData.getValue()+", Score : "+ rankData.getScore());
+            rank++;
+        }
+
+        System.out.println(RankingList.toArray().toString());
+
+        quizMessage.setRank(RankingList);
 
         quizMessage.setCommand(QuizCommandType.RESULT);
         quizMessage.setAction(QuizActionType.COMMAND);

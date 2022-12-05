@@ -116,9 +116,6 @@ public class RedisUtil {
         return hashOperations.delete(key, field);
     }
 
-    public Long hashDataSize(String key){
-        return hashOperations.size(key);
-    }
 
     // -----------------------------------------------------------------
     // [ Set ]
@@ -157,6 +154,10 @@ public class RedisUtil {
     public boolean SISMEMBER(String key, String value) {
 
         return setOperations.isMember(key, value);
+    }
+
+    public Long setDataSize(String key){
+        return setOperations.size(key);
     }
     // -------------------------------------------------------------
 
