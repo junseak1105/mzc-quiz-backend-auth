@@ -1,12 +1,11 @@
 package com.mzc.quiz.play.controller;
 
-import com.mzc.quiz.play.model.QuizMessage;
+import com.mzc.quiz.play.model.websocket.QuizMessage;
 import com.mzc.quiz.play.service.Test_WS_RedisService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 

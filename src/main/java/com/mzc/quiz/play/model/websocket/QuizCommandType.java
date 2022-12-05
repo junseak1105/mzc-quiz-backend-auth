@@ -1,4 +1,4 @@
-package com.mzc.quiz.play.model;
+package com.mzc.quiz.play.model.websocket;
 
 public enum QuizCommandType {
     READY,
@@ -6,5 +6,6 @@ public enum QuizCommandType {
     START,
     RESULT,
     FINAL,
-    KICK
+    KICK,
+    BROADCAST
 }

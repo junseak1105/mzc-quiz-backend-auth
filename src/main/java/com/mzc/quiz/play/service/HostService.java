@@ -4,8 +4,13 @@ import com.google.gson.Gson;
 import com.mzc.global.Response.DefaultRes;
 import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
-import com.mzc.quiz.play.model.*;
+import com.mzc.quiz.play.model.mongo.Quiz;
+import com.mzc.quiz.play.model.websocket.QuizActionType;
+import com.mzc.quiz.play.model.websocket.QuizCommandType;
+import com.mzc.quiz.play.model.websocket.QuizMessage;
+import com.mzc.quiz.play.model.websocket.UserRank;
 import com.mzc.quiz.play.repository.QplayRepository;
+import com.mzc.quiz.play.util.RedisPrefix;
 import com.mzc.quiz.play.util.RedisUtil;
 import com.mzc.quiz.show.entity.Show;
 import lombok.extern.log4j.Log4j2;
@@ -32,7 +37,7 @@ public class HostService {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     public void quizStart(QuizMessage quizMessage) {
-        String quizKey = redisUtil.genKey("META", quizMessage.getPinNum());
+        String quizKey = redisUtil.genKey(RedisPrefix.META.name(), quizMessage.getPinNum());
         if (redisUtil.hasKey(quizKey)) {
             int currentQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey, "currentQuiz").toString());
 
@@ -55,11 +60,11 @@ public class HostService {
 
     public void quizResult(QuizMessage quizMessage) {
 
-        String quizKey = redisUtil.genKey("LOG", quizMessage.getPinNum());
+        String quizKey = redisUtil.genKey(RedisPrefix.LOG.name(), quizMessage.getPinNum());
         redisUtil.leftPop(quizKey, 5); // List<V> leftPop(K key, long count) 사용하면 될듯
 
         // 정답 데이터 가져오기
-        String quizKey_1 = redisUtil.genKey("META", quizMessage.getPinNum());
+        String quizKey_1 = redisUtil.genKey(RedisPrefix.META.name(), quizMessage.getPinNum());
         int currentQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey_1, "currentQuiz").toString());
 
         String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey_1, "P" + currentQuiz).toString()));
@@ -69,8 +74,8 @@ public class HostService {
         quizMessage.setQuiz(quiz);
 
         // 랭킹 점수
-        String resultKey = redisUtil.genKey("RESULT", quizMessage.getPinNum());
-        long userCount = redisUtil.setDataSize(redisUtil.genKey("PLAY", quizMessage.getPinNum()));
+        String resultKey = redisUtil.genKey(RedisPrefix.RESULT.name(), quizMessage.getPinNum());
+        long userCount = redisUtil.setDataSize(redisUtil.genKey(RedisPrefix.PLAY.name(), quizMessage.getPinNum()));
         Set<ZSetOperations.TypedTuple<String>> ranking = redisUtil.getRanking(resultKey, 0, userCount);
 
         Iterator<ZSetOperations.TypedTuple<String>> iterRank = ranking.iterator();
@@ -97,7 +102,7 @@ public class HostService {
     }
 
     public void quizSkip(QuizMessage quizMessage) {
-        String quizKey = redisUtil.genKey("META", quizMessage.getPinNum());
+        String quizKey = redisUtil.genKey(RedisPrefix.META.name(), quizMessage.getPinNum());
 
         int currentQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey, "currentQuiz").toString());
         int lastQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey,"lastQuiz").toString());
@@ -120,42 +125,41 @@ public class HostService {
 
     public void quizFinal(QuizMessage quizMessage) {
 
-        redisUtil.genKey("LOG", quizMessage.getPinNum());
+        redisUtil.genKey(RedisPrefix.LOG.name(), quizMessage.getPinNum());
         quizMessage.setCommand(QuizCommandType.FINAL);
         quizMessage.setAction(QuizActionType.COMMAND);
         simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
     }
 
-    public void userBan(QuizMessage quizMessage) {
+    public void userBan(QuizMessage quizMessage){
         String pin = quizMessage.getPinNum();
-        String key = redisUtil.genKey("PLAY", pin);
+        String key = redisUtil.genKey(RedisPrefix.PLAY.name(), pin);
         String nickname = quizMessage.getNickName();
         System.out.printf(nickname);
 
-        if (redisUtil.SREM(key, nickname) == 1) {
-            QuizMessage resMessage = new QuizMessage();
-            resMessage.setPinNum(quizMessage.getPinNum());
+        QuizMessage resMessage = new QuizMessage();
+        if(redisUtil.SREM(key, nickname) == 1){
+            List<String> userList = redisUtil.getUserList(quizMessage.getPinNum());
+            resMessage.setAction(QuizActionType.BAN);
             resMessage.setCommand(QuizCommandType.KICK);
-            resMessage.setAction(QuizActionType.COMMAND);
+            resMessage.setPinNum(quizMessage.getPinNum());
             resMessage.setNickName(nickname);
+            resMessage.setUserList(userList);
             System.out.println(getUserList(pin));
-            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), resMessage);
-        } else {
-            QuizMessage resMessage = new QuizMessage();
-            resMessage.setPinNum(quizMessage.getPinNum());
-            resMessage.setCommand(QuizCommandType.KICK);
-            resMessage.setAction(QuizActionType.COMMAND);
-            resMessage.setNickName(nickname);
-            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), resMessage + "존재하지 않습니다");
+        }else{
+//            resMessage.setPinNum(quizMessage.getPinNum());
+//            resMessage.setAction(QuizActionType.BAN);
+//            resMessage.setCommand(QuizCommandType.KICK);
+//            resMessage.setNickName(nickname);
+
         }
+        simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), resMessage) ;
     }
 
-    public String[] getUserList(String pinNum) {
-        Set<String> userList = redisUtil.SMEMBERS("PLAY:" + pinNum);
-        String[] test = new String[31];
-        userList.toArray(test);
-        test[0] = "0";
-        return test;
+
+    // 공통 기능으로 빼기
+    public List<String> getUserList(String pinNum){
+        return redisUtil.getUserList(pinNum);
     }
 
     // 퀴즈 핀
@@ -179,7 +183,7 @@ public class HostService {
         while (true) {
             pin = RandomStringUtils.randomNumeric(6);
             String playKey = redisUtil.genKey(pin);
-            String quizKey = redisUtil.genKey("META", pin);
+            String quizKey = redisUtil.genKey(RedisPrefix.META.name(), pin);
 
             if (redisUtil.hasKey(playKey)) {
                 // 다시 생성
@@ -198,6 +202,7 @@ public class HostService {
                     //return "퀴즈데이터가 정상적으로 저장되지 않았습니다.";
                 }
 
+                // PLAY:pinNum  - 유저 리스트에 MongoDB의 ID가 들어감
                 redisUtil.SADD(playKey, quizId);
                 redisUtil.expire(playKey, 12, TimeUnit.HOURS);  // 하루만 유지??
                 break;

@@ -1,7 +1,8 @@
-package com.mzc.quiz.play.model;
+package com.mzc.quiz.play.model.websocket;
 
 // WebSocket 통신용 Message model
 
+import com.mzc.quiz.play.model.mongo.Quiz;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,6 +19,7 @@ public class QuizMessage {
     private QuizActionType action;
     private String nickName;//Ban, setNickname
 
+
     private List<UserRank> rank;
 
     //type에 따른 분기
@@ -25,6 +27,8 @@ public class QuizMessage {
     private Quiz quiz;
     //SUBMIT
     private Submit submit;
+    private List<String> userList;
+
 }
 
 

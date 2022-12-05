@@ -4,6 +4,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -196,5 +197,18 @@ public class RedisUtil {
         return listOperations.leftPop(key,count);
     }
 
+    // ----------------------------------------------------------------
+    // [Custom]
+
+
+    // Set에서 유저 목록 조회 후 리턴
+    public List<String> getUserList(String pinNum){
+        Set<String> setUserList = setOperations.members("PLAY:"+pinNum);
+
+        List<String> stringUserList = new ArrayList<>();
+        stringUserList.addAll(setUserList);
+
+        return stringUserList;
+    }
 
 }

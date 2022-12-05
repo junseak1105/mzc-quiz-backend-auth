@@ -1,6 +1,6 @@
 package com.mzc.quiz.play.service;
 
-import com.mzc.quiz.play.model.QuizMessage;
+import com.mzc.quiz.play.model.websocket.QuizMessage;
 import com.mzc.quiz.play.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -4,10 +4,11 @@ import com.google.gson.Gson;
 import com.mzc.global.Response.DefaultRes;
 import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
-import com.mzc.quiz.play.model.Quiz;
-import com.mzc.quiz.play.model.QuizActionType;
-import com.mzc.quiz.play.model.QuizCommandType;
-import com.mzc.quiz.play.model.QuizMessage;
+import com.mzc.quiz.play.model.mongo.Quiz;
+import com.mzc.quiz.play.model.websocket.QuizActionType;
+import com.mzc.quiz.play.model.websocket.QuizCommandType;
+import com.mzc.quiz.play.model.websocket.QuizMessage;
+import com.mzc.quiz.play.util.RedisPrefix;
 import com.mzc.quiz.play.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -38,29 +40,33 @@ public class ClientService {
         String playKey = redisUtil.genKey(quizMessage.getPinNum());
         String username = quizMessage.getNickName();
         // Set 조회해서 -> content에 넣어서 보내기
-
+        QuizMessage resMessage = new QuizMessage();
         System.out.println(quizMessage);
         if (redisUtil.SISMEMBER(playKey, username)) {
-            /**
-             * 닉네임 중복 처리 필요
-             */
-//            simpMessagingTemplate.convertAndSendToUser(username, "/queue/", quizMessage);
+            // Front에서 KickName 중복시 명령어 결정 후 추가 코드 작성
+            simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/queue/" + quizMessage.getPinNum(), "nicknametry");
             System.out.println("닉네임 중복");
         } else {
             redisUtil.SADD(playKey, username);
+            List<String> userList = redisUtil.getUserList(quizMessage.getPinNum());
+
             quizMessage.setAction(QuizActionType.COMMAND);
             quizMessage.setCommand(QuizCommandType.WAIT);
+            quizMessage.setUserList(userList);
+
             // 보낸 유저한테만 다시 보내주고
             simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/queue/" + quizMessage.getPinNum(), quizMessage);
-            // 변경된 유저 목록은 브로드캐스트로 알려주고
-            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), "123123");
+
+            quizMessage.setAction(QuizActionType.ROBBY);
+            quizMessage.setCommand(QuizCommandType.BROADCAST);
+            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
         }
     }
 
     public void submit(QuizMessage quizMessage) {
-        String quizKey = redisUtil.genKey("META", quizMessage.getPinNum());
+        String quizKey = redisUtil.genKey(RedisPrefix.META.name(), quizMessage.getPinNum());
 
-        String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey, "P" + quizMessage.getSubmit().getQuizNum()).toString()));
+        String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey, RedisPrefix.P.name() + quizMessage.getSubmit().getQuizNum()).toString()));
         Gson gson = new Gson();
         Quiz quiz = gson.fromJson(QuizDataToString, Quiz.class);
 
@@ -99,7 +105,7 @@ public class ClientService {
 
         // Result:키값 시작할 때 먼저 생성해놓는게 좋겠죠?
         // 랭킹점수 증가
-        String resultKey = redisUtil.genKey("RESULT", quizMessage.getPinNum());
+        String resultKey = redisUtil.genKey(RedisPrefix.RESULT.name(), quizMessage.getPinNum());
         // 해당 키가 존재하는지 체크
         if(redisUtil.hasKey(resultKey)){ // 있으면 점수 증가
             System.out.println("HasKey");

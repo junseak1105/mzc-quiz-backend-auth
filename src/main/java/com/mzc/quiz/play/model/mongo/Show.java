@@ -1,4 +1,4 @@
-package com.mzc.quiz.play.model;
+package com.mzc.quiz.play.model.mongo;
 
 import com.mzc.quiz.show.entity.QuizInfo;
 import lombok.*;

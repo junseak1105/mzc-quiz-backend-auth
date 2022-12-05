@@ -1,8 +1,8 @@
 package com.mzc.quiz.play.controller;
 
 import com.mzc.global.Response.DefaultRes;
-import com.mzc.quiz.play.model.QuizMessage;
-import com.mzc.quiz.play.model.Show;
+import com.mzc.quiz.play.model.websocket.QuizMessage;
+import com.mzc.quiz.play.model.mongo.Show;
 import com.mzc.quiz.play.service.HostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -10,6 +10,8 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class HostController {
@@ -24,7 +26,7 @@ public class HostController {
     }
 
     @PostMapping("/v1/host/getUserList")
-    public String[] getUserList(@RequestBody QuizMessage quizMessage){
+    public List<String> getUserList(@RequestBody QuizMessage quizMessage){
         return hostService.getUserList(quizMessage.getPinNum());
     }
 

@@ -1,4 +1,4 @@
-package com.mzc.quiz.play.model;
+package com.mzc.quiz.play.model.websocket;
 
 import lombok.*;
 
