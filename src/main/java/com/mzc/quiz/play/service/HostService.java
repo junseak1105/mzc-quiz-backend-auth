@@ -14,6 +14,7 @@ import com.mzc.quiz.show.entity.Show;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,16 @@ public class HostService {
 
         String quizKey = redisUtil.genKey("LOG", quizMessage.getPinNum());
         redisUtil.leftPop(quizKey,5); // List<V> leftPop(K key, long count) 사용하면 될듯
+
+        // 정답 데이터 가져오기
+
+
+        // 랭킹 점수
+        String resultKey = redisUtil.genKey("RESULT", quizMessage.getPinNum());
+        long userCount = redisUtil.hashDataSize(redisUtil.genKey("PLAY",quizMessage.getPinNum()));
+        Set<ZSetOperations.TypedTuple<String>> ranking = redisUtil.getRanking(resultKey, 0, userCount);
+
+        // ZSetOperations.TypedTuple<String> 이거 어캐사용하는거죠..?
 
         quizMessage.setCommand(QuizCommandType.RESULT);
         quizMessage.setAction(QuizActionType.COMMAND);

@@ -116,6 +116,9 @@ public class RedisUtil {
         return hashOperations.delete(key, field);
     }
 
+    public Long hashDataSize(String key){
+        return hashOperations.size(key);
+    }
 
     // -----------------------------------------------------------------
     // [ Set ]
