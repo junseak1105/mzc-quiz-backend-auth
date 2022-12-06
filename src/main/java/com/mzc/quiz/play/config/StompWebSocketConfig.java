@@ -10,10 +10,14 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
+    public static final String ENDPOINT = "/connect";
+    public static final String TOPIC = "/pin";
+    public static final String DIRECT = "/queue";
+    public static final String PREFIX = "/quiz";
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/connect")
+        registry.addEndpoint(ENDPOINT)
                 .setAllowedOriginPatterns("*")
                 .setHandshakeHandler(new CustomHandshakeHandler())
                 .withSockJS();
@@ -21,8 +25,8 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.setApplicationDestinationPrefixes("/quiz");
-        config.enableSimpleBroker("/pin", "/queue");
+        config.setApplicationDestinationPrefixes(PREFIX);
+        config.enableSimpleBroker(TOPIC, DIRECT);
 
     }
 }

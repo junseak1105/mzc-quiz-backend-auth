@@ -18,6 +18,9 @@ import java.security.Principal;
 import java.util.Base64;
 import java.util.List;
 
+import static com.mzc.quiz.play.config.StompWebSocketConfig.DIRECT;
+import static com.mzc.quiz.play.config.StompWebSocketConfig.TOPIC;
+
 @Service
 @RequiredArgsConstructor
 public class ClientService {
@@ -44,7 +47,7 @@ public class ClientService {
         System.out.println(quizMessage);
         if (redisUtil.SISMEMBER(playKey, username)) {
             // Front에서 KickName 중복시 명령어 결정 후 추가 코드 작성
-            simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/queue/" + quizMessage.getPinNum(), "nicknametry");
+            simpMessagingTemplate.convertAndSendToUser(principal.getName(), DIRECT + quizMessage.getPinNum(), "nicknametry");
             System.out.println("닉네임 중복");
         } else {
             redisUtil.SADD(playKey, username);
@@ -55,11 +58,11 @@ public class ClientService {
             quizMessage.setUserList(userList);
 
             // 보낸 유저한테만 다시 보내주고
-            simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/queue/" + quizMessage.getPinNum(), quizMessage);
+            simpMessagingTemplate.convertAndSendToUser(principal.getName(), DIRECT + quizMessage.getPinNum(), quizMessage);
 
             quizMessage.setAction(QuizActionType.ROBBY);
             quizMessage.setCommand(QuizCommandType.BROADCAST);
-            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
+            simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
         }
     }
 

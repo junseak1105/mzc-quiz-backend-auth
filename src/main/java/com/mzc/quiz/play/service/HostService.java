@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static com.mzc.quiz.play.config.StompWebSocketConfig.TOPIC;
+
 @Service
 @Log4j2
 public class HostService {
@@ -52,7 +54,7 @@ public class HostService {
             quizMessage.setAction(QuizActionType.COMMAND);
             quizMessage.setCommand(QuizCommandType.START);
             quizMessage.setQuiz(quiz);
-            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
+            simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
         } else {
 
         }
@@ -98,7 +100,7 @@ public class HostService {
 
         quizMessage.setCommand(QuizCommandType.RESULT);
         quizMessage.setAction(QuizActionType.COMMAND);
-        simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
+        simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
     }
 
     public void quizSkip(QuizMessage quizMessage) {
@@ -120,7 +122,7 @@ public class HostService {
 
 //        quizMessage.setCommand(QuizCommandType.START);
 //        quizMessage.setAction(QuizActionType.COMMAND);
-//        simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
+//        simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
     }
 
     public void quizFinal(QuizMessage quizMessage) {
@@ -128,7 +130,7 @@ public class HostService {
         redisUtil.genKey(RedisPrefix.LOG.name(), quizMessage.getPinNum());
         quizMessage.setCommand(QuizCommandType.FINAL);
         quizMessage.setAction(QuizActionType.COMMAND);
-        simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
+        simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
     }
 
     public void userBan(QuizMessage quizMessage){
@@ -153,7 +155,7 @@ public class HostService {
 //            resMessage.setNickName(nickname);
 
         }
-        simpMessagingTemplate.convertAndSend("/pin/"+quizMessage.getPinNum(), resMessage) ;
+        simpMessagingTemplate.convertAndSend(TOPIC+quizMessage.getPinNum(), resMessage) ;
     }
 
 
