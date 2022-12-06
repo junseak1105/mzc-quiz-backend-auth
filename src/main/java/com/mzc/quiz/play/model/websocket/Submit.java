@@ -1,4 +1,4 @@
-package com.mzc.quiz.play.model.content;
+package com.mzc.quiz.play.model.websocket;
 
 import lombok.*;
 
@@ -8,10 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class Submit {
-    private String selected;
-    private String totalElapsedTime;
-    private String ans;
+    private String quizNum;
+    private String answerTime; //미제출자 -1
+    private String[] answer; // 유저가 선택한 답안 ["num1", "num2", "num3"] ["O"] ["X"] ["답안"]
 }
+
 /*
 1. Submit 메시지 양식
 {

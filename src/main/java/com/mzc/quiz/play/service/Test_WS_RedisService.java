@@ -1,6 +1,6 @@
 package com.mzc.quiz.play.service;
 
-import com.mzc.quiz.play.model.QuizMessage;
+import com.mzc.quiz.play.model.websocket.QuizMessage;
 import com.mzc.quiz.play.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,15 +33,15 @@ public class Test_WS_RedisService {
     public void RedisTest(int pin, QuizMessage quizMessage){
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
         String key = "pin:"+pin;
-        String value = quizMessage.getSender();
+        String value = quizMessage.getNickName();
         vop.set(key, value);
-        log.info("quiz message : "+quizMessage.getContent());
+//        log.info("quiz message : "+quizMessage.getContent());
         log.info("Redis get " + vop.get(key));
     }
 
     public void RedisUtilTest(int pin, QuizMessage quizMessage){
         String key = "UserList:"+pin;
-        String value = quizMessage.getSender();
+        String value = quizMessage.getNickName();
         redisUtil.SET(key, value);
 
         log.info("Redis get :" + redisUtil.getData(key));
