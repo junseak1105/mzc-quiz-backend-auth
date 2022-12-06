@@ -43,9 +43,7 @@ public class HostService {
         if (redisUtil.hasKey(quizKey)) {
             int currentQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey, "currentQuiz").toString());
 
-            //String quizData = redisUtil.GetHashData(quizKey,"p"+currentQuiz).toString();
-            //System.out.println(quizData);
-            String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey, "P" + currentQuiz).toString()));
+            String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey, RedisPrefix.P.name() + currentQuiz).toString()));
 
             Gson gson = new Gson();
             Quiz quiz = gson.fromJson(QuizDataToString, Quiz.class);
@@ -69,7 +67,7 @@ public class HostService {
         String quizKey_1 = redisUtil.genKey(RedisPrefix.META.name(), quizMessage.getPinNum());
         int currentQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey_1, "currentQuiz").toString());
 
-        String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey_1, "P" + currentQuiz).toString()));
+        String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey_1, RedisPrefix.P.name() + currentQuiz).toString()));
 
         Gson gson = new Gson();
         Quiz quiz = gson.fromJson(QuizDataToString, Quiz.class);
@@ -94,13 +92,20 @@ public class HostService {
 
         quizMessage.setRank(RankingList);
 
+
+        //int lastQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey,"lastQuiz").toString());
         // 마지막 문제 체크해서 final로 이동해야함.
         // 아직 터짐
-        redisUtil.setHashData(quizKey_1,"currentQuiz", Integer.toString(quizMessage.getQuiz().getNum()+1));
+        //if(currentQuiz < lastQuiz) {
+            redisUtil.setHashData(quizKey_1, "currentQuiz", Integer.toString(quizMessage.getQuiz().getNum() + 1));
 
-        quizMessage.setCommand(QuizCommandType.RESULT);
-        quizMessage.setAction(QuizActionType.COMMAND);
-        simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
+            quizMessage.setCommand(QuizCommandType.RESULT);
+            quizMessage.setAction(QuizActionType.COMMAND);
+            simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
+        //}else{
+        //    quizFinal(quizMessage);
+        //}
+
     }
 
     public void quizSkip(QuizMessage quizMessage) {
@@ -113,8 +118,8 @@ public class HostService {
 
         if(currentQuiz < lastQuiz){
             System.out.println("current" + currentQuiz);
-            currentQuiz++;
-            redisUtil.setHashData(quizKey, "currentQuiz", Integer.toString(currentQuiz));
+            //currentQuiz++;
+            redisUtil.setHashData(quizKey, "currentQuiz", Integer.toString(currentQuiz + 1));
             quizStart(quizMessage);
         }else{
             quizFinal(quizMessage);
@@ -198,7 +203,7 @@ public class HostService {
                     redisUtil.setHashData(quizKey, "lastQuiz", Integer.toString(show.getQuizData().size()));
                     for (int i = 0; i < show.getQuizData().size(); i++) {
                         String base64QuizData = Base64.getEncoder().encodeToString(gson.toJson(show.getQuizData().get(i)).getBytes());
-                        redisUtil.setHashData(quizKey, "P" + (i + 1), base64QuizData);
+                        redisUtil.setHashData(quizKey, RedisPrefix.P.name() + (i + 1), base64QuizData);
                     }
                 } else {
                     //return "퀴즈데이터가 정상적으로 저장되지 않았습니다.";
