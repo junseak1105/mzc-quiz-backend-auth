@@ -39,7 +39,7 @@ public class HostService {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     public void quizStart(QuizMessage quizMessage) {
-        String quizKey = redisUtil.genKey(RedisPrefix.META.name(), quizMessage.getPinNum());
+        String quizKey = redisUtil.genKey(RedisPrefix.QUIZ.name(), quizMessage.getPinNum());
         if (redisUtil.hasKey(quizKey)) {
             int currentQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey, "currentQuiz").toString());
 
@@ -64,7 +64,7 @@ public class HostService {
         redisUtil.leftPop(quizKey, 5); // List<V> leftPop(K key, long count) 사용하면 될듯
 
         // 정답 데이터 가져오기
-        String quizKey_1 = redisUtil.genKey(RedisPrefix.META.name(), quizMessage.getPinNum());
+        String quizKey_1 = redisUtil.genKey(RedisPrefix.QUIZ.name(), quizMessage.getPinNum());
         int currentQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey_1, "currentQuiz").toString());
 
         String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey_1, RedisPrefix.P.name() + currentQuiz).toString()));
@@ -75,7 +75,7 @@ public class HostService {
 
         // 랭킹 점수
         String resultKey = redisUtil.genKey(RedisPrefix.RESULT.name(), quizMessage.getPinNum());
-        long userCount = redisUtil.setDataSize(redisUtil.genKey(RedisPrefix.PLAY.name(), quizMessage.getPinNum()));
+        long userCount = redisUtil.setDataSize(redisUtil.genKey(RedisPrefix.USER.name(), quizMessage.getPinNum()));
         Set<ZSetOperations.TypedTuple<String>> ranking = redisUtil.getRanking(resultKey, 0, userCount);
 
         Iterator<ZSetOperations.TypedTuple<String>> iterRank = ranking.iterator();
@@ -92,8 +92,6 @@ public class HostService {
         quizMessage.setRank(RankingList);
 
 
-        // 마지막 문제 체크해서 final로 이동해야함.
-        // 아직 터짐
         int lastQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey_1,"lastQuiz").toString());
         System.out.println(lastQuiz);
         if(currentQuiz < lastQuiz) {
@@ -108,7 +106,7 @@ public class HostService {
     }
 
     public void quizSkip(QuizMessage quizMessage) {
-        String quizKey = redisUtil.genKey(RedisPrefix.META.name(), quizMessage.getPinNum());
+        String quizKey = redisUtil.genKey(RedisPrefix.QUIZ.name(), quizMessage.getPinNum());
 
         int currentQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey, "currentQuiz").toString());
         int lastQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey,"lastQuiz").toString());
@@ -139,7 +137,7 @@ public class HostService {
 
     public void userBan(QuizMessage quizMessage){
         String pin = quizMessage.getPinNum();
-        String key = redisUtil.genKey(RedisPrefix.PLAY.name(), pin);
+        String key = redisUtil.genKey(RedisPrefix.USER.name(), pin);
         String nickname = quizMessage.getNickName();
         System.out.printf(nickname);
 
@@ -189,7 +187,7 @@ public class HostService {
         while (true) {
             pin = RandomStringUtils.randomNumeric(6);
             String playKey = redisUtil.genKey(pin);
-            String quizKey = redisUtil.genKey(RedisPrefix.META.name(), pin);
+            String quizKey = redisUtil.genKey(RedisPrefix.QUIZ.name(), pin);
 
             if (redisUtil.hasKey(playKey)) {
                 // 다시 생성

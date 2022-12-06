@@ -203,7 +203,9 @@ public class RedisUtil {
 
     // Set에서 유저 목록 조회 후 리턴
     public List<String> getUserList(String pinNum){
-        Set<String> setUserList = setOperations.members("PLAY:"+pinNum);
+
+
+        Set<String> setUserList = setOperations.members(genKey(RedisPrefix.USER.name(), pinNum));
 
         List<String> stringUserList = new ArrayList<>();
         stringUserList.addAll(setUserList);

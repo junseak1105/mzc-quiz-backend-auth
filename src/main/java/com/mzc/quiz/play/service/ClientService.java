@@ -40,7 +40,7 @@ public class ClientService {
 
 
     public void setNickname(Principal principal, QuizMessage quizMessage) {
-        String playKey = redisUtil.genKey(quizMessage.getPinNum());
+        String playKey = redisUtil.genKey(RedisPrefix.USER.name(),quizMessage.getPinNum());
         String username = quizMessage.getNickName();
         // Set 조회해서 -> content에 넣어서 보내기
         QuizMessage resMessage = new QuizMessage();
@@ -67,7 +67,7 @@ public class ClientService {
     }
 
     public void submit(QuizMessage quizMessage) {
-        String quizKey = redisUtil.genKey(RedisPrefix.META.name(), quizMessage.getPinNum());
+        String quizKey = redisUtil.genKey(RedisPrefix.QUIZ.name(), quizMessage.getPinNum());
 
         String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey, RedisPrefix.P.name() + quizMessage.getSubmit().getQuizNum()).toString()));
         Gson gson = new Gson();
@@ -93,7 +93,7 @@ public class ClientService {
                         isCorrect = 0;
                     }
                 }
-                isCorrect = 1;
+                //isCorrect = 1;
             }
         }
 
