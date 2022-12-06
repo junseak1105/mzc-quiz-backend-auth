@@ -11,9 +11,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public static final String ENDPOINT = "/connect";
-    public static final String TOPIC = "/pin";
-    public static final String DIRECT = "/queue";
-    public static final String PREFIX = "/quiz";
+    public static final String TOPIC = "/pin/";
+    public static final String DIRECT = "/queue/";
+    public static final String PREFIX = "/quiz/";
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
