@@ -87,25 +87,24 @@ public class HostService {
             System.out.println("rank : "+rank+", NickName : "+ rankData.getValue()+", Score : "+ rankData.getScore());
             rank++;
         }
-
-        System.out.println(RankingList.toArray().toString());
+        //System.out.println(RankingList.toArray().toString());
 
         quizMessage.setRank(RankingList);
 
 
-        //int lastQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey,"lastQuiz").toString());
         // 마지막 문제 체크해서 final로 이동해야함.
         // 아직 터짐
-        //if(currentQuiz < lastQuiz) {
+        int lastQuiz = Integer.parseInt(redisUtil.GetHashData(quizKey_1,"lastQuiz").toString());
+        System.out.println(lastQuiz);
+        if(currentQuiz < lastQuiz) {
             redisUtil.setHashData(quizKey_1, "currentQuiz", Integer.toString(quizMessage.getQuiz().getNum() + 1));
 
             quizMessage.setCommand(QuizCommandType.RESULT);
             quizMessage.setAction(QuizActionType.COMMAND);
             simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
-        //}else{
-        //    quizFinal(quizMessage);
-        //}
-
+        }else{
+            quizFinal(quizMessage);
+        }
     }
 
     public void quizSkip(QuizMessage quizMessage) {
