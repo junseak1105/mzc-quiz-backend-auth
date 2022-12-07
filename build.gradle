@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.5'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    /*id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"*/
 }
 
 group = 'com.mzc'
@@ -19,10 +20,11 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -30,10 +32,54 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Random
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+
     // swagger
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+    //keycloak
+ /*   implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.keycloak:keycloak-spring-boot-starter:17.0.1'
+    implementation 'org.keycloak.bom:keycloak-adapter-bom:17.0.1'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.7.5'*/
+
+    // websocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.webjars:stomp-websocket:2.3.3-1'
+}
+
+configurations.all {
+    exclude module: 'slf4j-simple'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+/*def querydslDir = "$buildDir/generated/querydsl" // (3)
+
+querydsl { // (4)
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets { // (5)
+    main.java.srcDir querydslDir
+}
+
+configurations { // (6)
+    querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl { // (7)
+    options.annotationProcessorPath = configurations.querydsl
+}
+ */
