@@ -18,7 +18,7 @@ import java.time.Instant;
 @SQLDelete(sql = "UPDATE \"hostauth\" SET deletedAt = NOW() WHERE id=?") // 삭제시 실행
 @Where(clause = "deleted_at is NULL")
 @NoArgsConstructor
-public class HostAuth {
+public class HostAuth{
     
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY) // 시퀀스 사용

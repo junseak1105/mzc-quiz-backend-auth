@@ -2,7 +2,9 @@ package com.mzc.Auth.controller;
 
 import com.mzc.Auth.model.Host;
 import com.mzc.Auth.request.HostJoinRequest;
+import com.mzc.Auth.request.HostLoginRequest;
 import com.mzc.Auth.response.HostJoinReponse;
+import com.mzc.Auth.response.HostLoginResponse;
 import com.mzc.Auth.response.HostResponse;
 import com.mzc.Auth.response.Response;
 import com.mzc.Auth.service.HostAuthService;
@@ -25,6 +27,10 @@ public class HostAuthController {
         return Response.success(HostJoinReponse.fromHost(host));
     }
 
-
+    @PostMapping("/login")
+    public Response<HostLoginResponse> login(@RequestBody HostLoginRequest request) {
+        String token = hostAuthService.login(request.getHostEmail(), request.getPassword());
+        return Response.success(new HostLoginResponse(token));
+    }
 
 }
