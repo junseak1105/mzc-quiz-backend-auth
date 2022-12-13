@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/hostauth")
 public class HostAuthController {
 
-    private HostAuthService hostAuthService;
+    final private HostAuthService hostAuthService;
 
     @PostMapping("/join")
     public Response<HostJoinReponse> join(@RequestBody HostJoinRequest request){
