@@ -6,10 +6,14 @@ import com.mzc.Auth.exception.ErrorCode;
 import com.mzc.Auth.model.Host;
 import com.mzc.Auth.repository.HostAuthRepository;
 import com.mzc.Auth.util.JwtTokenUtils;
+import com.mzc.global.Response.DefaultRes;
+import com.mzc.global.Response.ResponseMessages;
+import com.mzc.global.Response.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import springfox.documentation.service.ResponseMessage;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +34,7 @@ public class HostAuthService {
                 new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("hostEmail is %s", hostEmail)));
     }
 
-    public Host join(String hostEmail, String password) {
+    public DefaultRes join(String hostEmail, String password) {
         // 회원 가입 여부 체크
         hostAuthRepository.findByHostEmail(hostEmail).ifPresent(it -> {
             throw new ApplicationException(ErrorCode.DUPLICATED_HOST_EMAIL, String.format("hostEmail is %s", hostEmail));
@@ -38,7 +42,7 @@ public class HostAuthService {
 
         // 회원 가입 진행 -> host 등록
         HostAuth hostAuth = hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password)));
-        return Host.fromEntity(hostAuth);
+        return DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuth));
     }
 
     public String login(String hostEmail, String password) {
@@ -52,6 +56,7 @@ public class HostAuthService {
         }
         // 토큰 생성
         String token = JwtTokenUtils.generateToken(hostEmail, secretKey, expiredTimeMx);
+
 
         return token;
     }
