@@ -11,7 +11,7 @@ public enum ErrorCode {
     DUPLICATED_HOST_EMAIL(HttpStatus.CONFLICT, "Duplicated host email"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
 
-    //INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Invalid token"),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Invalid token"),
     HOST_EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "host email not founded"),
 
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "host email has invalid permission"),

@@ -1,13 +1,17 @@
 package com.mzc.Auth.config;
 
 
+import com.mzc.Auth.config.filter.JwtTokenFilter;
+import com.mzc.Auth.exception.CustomAuthenticationEntryPoint;
 import com.mzc.Auth.service.HostAuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -16,8 +20,8 @@ public class AutenticationConfig extends WebSecurityConfigurerAdapter {
 
     private final HostAuthService hostAuthService;
 
-    //@Value("${jwt.secret-key}")
-    //private String key;
+    @Value("${jwt.secret-key}")
+    private String key;
 
     // security 관련 설정
     @Override
@@ -30,9 +34,9 @@ public class AutenticationConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session 기반 사용 하지 않음
                 .and()
-                .exceptionHandling();
-                //.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                //.and()
-                //.addFilterBefore(new JwtTokenFilter(userService, key), UsernamePasswordAuthenticationFilter.class);
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .and()
+                .addFilterBefore(new JwtTokenFilter(hostAuthService, key), UsernamePasswordAuthenticationFilter.class);
     }
 }
