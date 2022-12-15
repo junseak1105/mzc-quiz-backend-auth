@@ -18,6 +18,7 @@ public class Host implements UserDetails {
     private Integer id;
     private String hostEmail;
     private String password;
+    private String nickName;
     private UserRole userRole;
     private Timestamp registeredAt;
     private Timestamp updatedAt;
@@ -29,6 +30,7 @@ public class Host implements UserDetails {
                 hostAuth.getId(),
                 hostAuth.getHostEmail(),
                 hostAuth.getPassword(),
+                hostAuth.getNickName(),
                 hostAuth.getRole(),
                 hostAuth.getRegisteredAt(),
                 hostAuth.getUpdatedAt(),

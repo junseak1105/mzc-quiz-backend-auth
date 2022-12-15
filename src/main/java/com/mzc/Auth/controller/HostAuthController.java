@@ -38,7 +38,7 @@ public class HostAuthController {
     @ApiOperation(value = "호스트 회원가입", notes = "필수 데이터 : hostEmail, nickName, password")
     @PostMapping("/join")
     public DefaultRes join(@RequestBody HostJoinRequest request){
-        return hostAuthService.join(request.getHostEmail(),request.getPassword());
+        return hostAuthService.join(request.getHostEmail(),request.getPassword(),request.getNickName());
     }
 
     @ApiOperation(value = "호스트 로그인", notes = "필수 데이터 : hostEmail, password")

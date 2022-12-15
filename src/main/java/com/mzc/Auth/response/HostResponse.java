@@ -10,12 +10,14 @@ import lombok.Getter;
 public class HostResponse {
     private Integer id;
     private String hostEmail;
+    private String nickName;
     private UserRole role;
 
     public static HostResponse fromHost(Host host){
         return new HostResponse(
                 host.getId(),
                 host.getHostEmail(),
+                host.getNickName(),
                 host.getUserRole()
         );
     }
