@@ -33,8 +33,10 @@ public class Test_WS_RedisService {
 
     public void RabbitMQTest(QuizMessage quizMessage){
         String RoutingKey = ROUTING_KEY_PREFIX + quizMessage.getPinNum();
+        String EXName = quizMessage.getNickName();
+        System.out.println(EXName);
         System.out.println(RoutingKey);
-        rabbitTemplate.convertAndSend(PIN_EXCHANGE_NAME, RoutingKey, quizMessage);
+        rabbitTemplate.convertAndSend(EXName, RoutingKey, quizMessage);
     }
 
     public void WebsocketTest(int pin, QuizMessage quizMessage){

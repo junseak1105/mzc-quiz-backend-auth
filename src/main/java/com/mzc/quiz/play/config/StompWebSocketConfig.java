@@ -31,7 +31,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(ENDPOINT)
                 .setAllowedOriginPatterns("*")
-//                .setHandshakeHandler(new CustomHandshakeHandler())
+                .setHandshakeHandler(new CustomHandshakeHandler())
                 .withSockJS();
     }
 
@@ -48,7 +48,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setClientLogin(RabbitMQ_ID)
                 .setClientPasscode(RabbitMQ_PW);
 
-//        config.enableSimpleBroker(TOPIC, DIRECT);
+        config.enableSimpleBroker("/bro", "/uni");
 
     }
 }
