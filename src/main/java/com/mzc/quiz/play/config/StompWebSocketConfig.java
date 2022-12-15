@@ -16,7 +16,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public static final String ENDPOINT = "/connect";
     public static final String TOPIC = "/pin/";
     public static final String DIRECT = "/queue/";
-    public static final String PREFIX = "/quiz";
+    public static final String PREFIX = "/quiz/";
 
     @Value("${spring.rabbitmq.host}")
     private String RabbitMQ_Host;
@@ -39,7 +39,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config) {
 //        config.setPathMatcher(new AntPathMatcher("."));  // url을 chat/room/3 -> chat.room.3으로 참조하기 위한 설정
         config.setApplicationDestinationPrefixes(PREFIX);
-        config.enableStompBrokerRelay("/topic", "/queue", "/exchange", "/amq/queue")
+        config.enableStompBrokerRelay("/topic","/queue", "/exchange", "/amq/queue")
                 .setRelayHost(RabbitMQ_Host)
                 .setRelayPort(61613)
                 .setVirtualHost("/")
@@ -48,7 +48,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setClientLogin(RabbitMQ_ID)
                 .setClientPasscode(RabbitMQ_PW);
 
-        config.enableSimpleBroker("/bro", "/uni");
+        config.enableSimpleBroker(TOPIC, DIRECT);
 
     }
 }
