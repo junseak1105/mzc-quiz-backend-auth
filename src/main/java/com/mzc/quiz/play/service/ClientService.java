@@ -18,6 +18,9 @@ import java.security.Principal;
 import java.util.Base64;
 import java.util.List;
 
+import static com.mzc.quiz.play.config.StompWebSocketConfig.DIRECT;
+import static com.mzc.quiz.play.config.StompWebSocketConfig.TOPIC;
+
 @Service
 @RequiredArgsConstructor
 public class ClientService {
@@ -37,14 +40,14 @@ public class ClientService {
 
 
     public void setNickname(Principal principal, QuizMessage quizMessage) {
-        String playKey = redisUtil.genKey(quizMessage.getPinNum());
+        String playKey = redisUtil.genKey(RedisPrefix.USER.name(),quizMessage.getPinNum());
         String username = quizMessage.getNickName();
         // Set 조회해서 -> content에 넣어서 보내기
         QuizMessage resMessage = new QuizMessage();
         System.out.println(quizMessage);
         if (redisUtil.SISMEMBER(playKey, username)) {
             // Front에서 KickName 중복시 명령어 결정 후 추가 코드 작성
-            simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/queue/" + quizMessage.getPinNum(), "nicknametry");
+            simpMessagingTemplate.convertAndSendToUser(principal.getName(), DIRECT + quizMessage.getPinNum(), "nicknametry");
             System.out.println("닉네임 중복");
         } else {
             redisUtil.SADD(playKey, username);
@@ -55,16 +58,16 @@ public class ClientService {
             quizMessage.setUserList(userList);
 
             // 보낸 유저한테만 다시 보내주고
-            simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/queue/" + quizMessage.getPinNum(), quizMessage);
+            simpMessagingTemplate.convertAndSendToUser(principal.getName(), DIRECT + quizMessage.getPinNum(), quizMessage);
 
             quizMessage.setAction(QuizActionType.ROBBY);
             quizMessage.setCommand(QuizCommandType.BROADCAST);
-            simpMessagingTemplate.convertAndSend("/pin/" + quizMessage.getPinNum(), quizMessage);
+            simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
         }
     }
 
     public void submit(QuizMessage quizMessage) {
-        String quizKey = redisUtil.genKey(RedisPrefix.META.name(), quizMessage.getPinNum());
+        String quizKey = redisUtil.genKey(RedisPrefix.QUIZ.name(), quizMessage.getPinNum());
 
         String QuizDataToString = new String(Base64.getDecoder().decode(redisUtil.GetHashData(quizKey, RedisPrefix.P.name() + quizMessage.getSubmit().getQuizNum()).toString()));
         Gson gson = new Gson();
@@ -90,7 +93,7 @@ public class ClientService {
                         isCorrect = 0;
                     }
                 }
-                isCorrect = 1;
+                //isCorrect = 1;
             }
         }
 
@@ -99,9 +102,8 @@ public class ClientService {
         System.out.println("Rate : " + Rate);
         System.out.println("isCorrect : " + isCorrect);
 
-        double Score = ((TotalTime - AnswerTime) / TotalTime) * 1000 * Rate * isCorrect;
+        double Score = ((TotalTime*1000 - AnswerTime) / (TotalTime*1000)) * 1000 * Rate * isCorrect;
 
-        System.out.println(Score);
 
         // Result:키값 시작할 때 먼저 생성해놓는게 좋겠죠?
         // 랭킹점수 증가

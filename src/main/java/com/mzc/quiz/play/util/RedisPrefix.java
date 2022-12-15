@@ -2,7 +2,8 @@ package com.mzc.quiz.play.util;
 
 public enum RedisPrefix {
     PLAY,
-    META,
+    USER,
+    QUIZ,
     LOG,
     RESULT,
     P
