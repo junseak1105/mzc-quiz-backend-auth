@@ -18,6 +18,7 @@ public class QuizMessage {
     private QuizCommandType command;
     private QuizActionType action;
     private String nickName;//Ban, setNickname
+    private String startTime; //퀴즈 시작 서버 타임용
 
 
     private List<UserRank> rank;
