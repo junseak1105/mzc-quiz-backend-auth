@@ -7,20 +7,23 @@ import com.mzc.Auth.response.HostJoinReponse;
 import com.mzc.Auth.response.HostLoginResponse;
 import com.mzc.Auth.response.HostResponse;
 import com.mzc.Auth.response.Response;
+import com.mzc.Auth.service.EmailService;
 import com.mzc.Auth.service.HostAuthService;
 import com.mzc.global.Response.DefaultRes;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
+@Log4j2
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/hostauth")
 public class HostAuthController {
 
     final private HostAuthService hostAuthService;
+    private final EmailService emailService;
 
 //    @PostMapping("/join")
 //    public Response<HostJoinReponse> join(@RequestBody HostJoinRequest request){
@@ -46,6 +49,14 @@ public class HostAuthController {
     public DefaultRes login(@RequestBody HostLoginRequest request) {
         return hostAuthService.login(request.getHostEmail(), request.getPassword());
 
+    }
+
+    @PostMapping("login/mailConfirm")
+    @ResponseBody
+    public String mailConfirm(@RequestParam String email) throws Exception {
+        String code = emailService.sendSimpleMessage(email);
+        log.info("인증코드 : " + code);
+        return code;
     }
 
 //    @GetMapping("/host")

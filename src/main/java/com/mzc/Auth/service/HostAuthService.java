@@ -1,8 +1,6 @@
 package com.mzc.Auth.service;
 
 import com.mzc.Auth.entity.HostAuth;
-import com.mzc.Auth.exception.ApplicationException;
-import com.mzc.Auth.exception.ErrorCode;
 import com.mzc.Auth.model.Host;
 import com.mzc.Auth.repository.HostAuthRepository;
 import com.mzc.Auth.util.JwtTokenUtils;
@@ -30,10 +28,10 @@ public class HostAuthService {
     @Value("${jwt.token.expired-time-ms}")
     private Long expiredTimeMx;
 
-    public Host loadFindByHostEmail(String hostEmail) {
-        return hostAuthRepository.findByHostEmail(hostEmail).map(Host::fromEntity).orElseThrow(() ->
-                new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("hostEmail is %s", hostEmail)));
-    }
+//    public Host loadFindByHostEmail(String hostEmail) {
+//        return hostAuthRepository.findByHostEmail(hostEmail).map(Host::fromEntity).orElseThrow(() ->
+//                new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("hostEmail is %s", hostEmail)));
+//    }
 
     public DefaultRes join(String hostEmail, String password, String nickName) {
         // 회원 가입 여부 체크

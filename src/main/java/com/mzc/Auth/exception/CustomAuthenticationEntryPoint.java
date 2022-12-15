@@ -1,6 +1,9 @@
 package com.mzc.Auth.exception;
 
 import com.mzc.Auth.response.Response;
+import com.mzc.global.Response.DefaultRes;
+import com.mzc.global.Response.ResponseMessages;
+import com.mzc.global.Response.StatusCode;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
