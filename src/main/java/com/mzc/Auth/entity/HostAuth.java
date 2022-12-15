@@ -30,6 +30,9 @@ public class HostAuth{
         @Column(name = "password")
         private String password;
 
+        @Column(name = "nickName")
+        private String nickName;
+
         @Column(name = "role")
         @Enumerated(EnumType.STRING)
         private UserRole role = UserRole.HOST; // 권한 db에 저장
@@ -54,10 +57,11 @@ public class HostAuth{
         }
 
         // UserEntity 반환
-        public static HostAuth of(String setHostEmail, String password) {
+        public static HostAuth of(String setHostEmail, String password, String nickName) {
             HostAuth hostAuth = new HostAuth();
             hostAuth.setHostEmail(setHostEmail);
             hostAuth.setPassword(password);
+            hostAuth.setNickName(nickName);
             return hostAuth;
         }
     }

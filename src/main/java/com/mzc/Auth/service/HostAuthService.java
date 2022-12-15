@@ -35,7 +35,7 @@ public class HostAuthService {
                 new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("hostEmail is %s", hostEmail)));
     }
 
-    public DefaultRes join(String hostEmail, String password) {
+    public DefaultRes join(String hostEmail, String password, String nickName) {
         // 회원 가입 여부 체크
 //        hostAuthRepository.findByHostEmail(hostEmail).ifPresent(it -> {
 //            throw new ApplicationException(ErrorCode.DUPLICATED_HOST_EMAIL, String.format("hostEmail is %s", hostEmail));
@@ -47,7 +47,7 @@ public class HostAuthService {
         }
 
         // 회원 가입 진행 -> host 등록
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password)))));
+        return DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password),nickName))));
     }
 
     public DefaultRes login(String hostEmail, String password) {
@@ -56,7 +56,7 @@ public class HostAuthService {
         if(hostAuth.isPresent()){
             DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND);
         }else{
-            DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS, String.format("로그인 성공", hostEmail));
+            DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS);
         }
 
         // 회원가입 여부 체크
