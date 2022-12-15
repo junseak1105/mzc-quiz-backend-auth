@@ -49,7 +49,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
             String hostEmail = JwtTokenUtils.getHostEmail(token,key);
 
-            // userName 유효 체크
+            // hostEmail 유효 체크
             Host host = hostAuthService.loadFindByHostEmail(hostEmail);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

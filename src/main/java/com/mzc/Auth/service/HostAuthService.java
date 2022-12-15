@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import springfox.documentation.service.ResponseMessage;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class HostAuthService {
@@ -36,28 +38,38 @@ public class HostAuthService {
 
     public DefaultRes join(String hostEmail, String password) {
         // 회원 가입 여부 체크
-        hostAuthRepository.findByHostEmail(hostEmail).ifPresent(it -> {
-            throw new ApplicationException(ErrorCode.DUPLICATED_HOST_EMAIL, String.format("hostEmail is %s", hostEmail));
-        });
+//        hostAuthRepository.findByHostEmail(hostEmail).ifPresent(it -> {
+//            throw new ApplicationException(ErrorCode.DUPLICATED_HOST_EMAIL, String.format("hostEmail is %s", hostEmail));
+//        });
+
+        Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
+        if(hostAuth.isPresent()){
+            return DefaultRes.res(StatusCode.BAD_REQUEST,ResponseMessages.DUPLICATED_HOST_EMAIL,String.format("이미 가입되어있는 이미엘 입니다.", hostEmail));
+        }
 
         // 회원 가입 진행 -> host 등록
-        HostAuth hostAuth = hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password)));
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuth));
+        return DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password)))));
     }
 
-    public String login(String hostEmail, String password) {
+    public DefaultRes login(String hostEmail, String password) {
+
+        Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
+        if(hostAuth.isPresent()){
+            DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND, String.format("존재하지 않는 이메일 입니다. %s", hostEmail));
+        }else{
+            DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS, String.format("로그인 성공", hostEmail));
+        }
+
         // 회원가입 여부 체크
-        HostAuth hostAuth = hostAuthRepository.findByHostEmail(hostEmail).orElseThrow(() -> new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("not founded %s", hostEmail)));
+        //HostAuth hostAuth = hostAuthRepository.findByHostEmail(hostEmail).orElseThrow(() -> new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("not founded %s", hostEmail)));
 
         // 비밀 번호 체크
         //if(!userEntity.getPassword().equals(password)){
-        if (!encoder.matches(password, hostAuth.getPassword())) {
-            throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
+        if (!encoder.matches(password, hostAuth.get().getPassword())) {
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_PASSWORD,String.format("비밀번호가 일치하지 않습니다.. %s"));
+//            throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
         }
         // 토큰 생성
-        String token = JwtTokenUtils.generateToken(hostEmail, secretKey, expiredTimeMx);
-
-
-        return token;
+        return DefaultRes.res(StatusCode.OK, ResponseMessages.CREATE_TOKEN, JwtTokenUtils.generateToken(hostEmail, secretKey, expiredTimeMx));
     }
 }
