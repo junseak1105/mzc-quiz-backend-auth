@@ -4,6 +4,7 @@ import com.mzc.quiz.play.model.websocket.QuizMessage;
 import com.mzc.quiz.play.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -19,11 +20,22 @@ public class Test_WS_RedisService {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
+    private RabbitTemplate rabbitTemplate;
+    private static final String PIN_QUEUE_NAME = "quiz.queue";
+    private static final String PIN_EXCHANGE_NAME = "quiz.exchange";
+    private static final String ROUTING_KEY_PREFIX = "pin.";
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     RedisUtil redisUtil;
 
+
+    public void RabbitMQTest(QuizMessage quizMessage){
+        String RoutingKey = ROUTING_KEY_PREFIX + quizMessage.getPinNum();
+        System.out.println(RoutingKey);
+        rabbitTemplate.convertAndSend(PIN_EXCHANGE_NAME, RoutingKey, quizMessage);
+    }
 
     public void WebsocketTest(int pin, QuizMessage quizMessage){
        log.info("pin - "+pin);

@@ -29,4 +29,9 @@ public class Test_WS_RedisController {
         simpMessagingTemplate.convertAndSendToUser(user, retUrl, "123123123123");
     }
 
+    @MessageMapping("/Test")
+    public void rabbitMQTest(@RequestBody QuizMessage quizMessage, Principal principal) {
+        testWSRedisService.RabbitMQTest(quizMessage);
+    }
+
 }
