@@ -102,7 +102,7 @@ public class ClientService {
         System.out.println("Rate : " + Rate);
         System.out.println("isCorrect : " + isCorrect);
 
-        double Score = ((TotalTime*1000 - AnswerTime) / TotalTime) * 1000 * Rate * isCorrect;
+        double Score = ((TotalTime*1000 - AnswerTime) / (TotalTime*1000)) * 1000 * Rate * isCorrect;
 
 
         // Result:키값 시작할 때 먼저 생성해놓는게 좋겠죠?
