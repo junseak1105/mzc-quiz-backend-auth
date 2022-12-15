@@ -29,10 +29,10 @@ public class JwtTokenUtils {
                 .getBody();
     }
 
-    // 토큰 생성(username에 생성, key 값 지정, 토큰 유효 시간 설정)
-    public static String generateToken(String userName, String key, long expiredTimeMs) {
+    // 토큰 생성(HostEmail 생성, key 값 지정, 토큰 유효 시간 설정)
+    public static String generateToken(String hostEmail, String key, long expiredTimeMs) {
         Claims claims = Jwts.claims();
-        claims.put("userName", userName);
+        claims.put("hostEmail", hostEmail);
 
         return Jwts.builder()
                 .setClaims(claims)

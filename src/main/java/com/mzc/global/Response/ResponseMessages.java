@@ -11,13 +11,13 @@ public class ResponseMessages {
 
     public static final String INVALID_TOKEN = "유효하지 않는 토큰 입니다.";
 
-    public static final String CREATE_TOKEN = "유효하지 않는 토큰 입니다.";
+    public static final String CREATE_TOKEN = "토큰 생성 성공";
     public static final String DUPLICATED_HOST_EMAIL = "이메일 중복";
 
     public static final String HOST_EMAIL_NOT_FOUND = "해당 이메일 찾을 수 없습니다.";
 
     public static final String INVALID_PERMISSION = "해당 이메일 권한이 유효하지 않습니다.";
 
-    public static final String INVALID_PASSWORD = "유효하지 않는 비밀번호 입니다.";
+    public static final String INVALID_PASSWORD = "비밀번호가 일치하지 않습니다.";
 
 }

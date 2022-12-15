@@ -12,10 +12,8 @@ import com.mzc.global.Response.DefaultRes;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,4 +47,9 @@ public class HostAuthController {
         return hostAuthService.login(request.getHostEmail(), request.getPassword());
 
     }
+
+//    @GetMapping("/host")
+//    public DefaultRes host(Authentication authentication) {
+//        return hostAuthService.loadFindByHostEmail(authentication.getName());
+//    }
 }

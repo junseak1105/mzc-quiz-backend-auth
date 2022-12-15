@@ -23,7 +23,6 @@ public class HostAuthService {
 
     private final HostAuthRepository hostAuthRepository;
     private final BCryptPasswordEncoder encoder;
-//    private final UserCacheRepository redisRepository;
 
     @Value("${jwt.secret-key}")
     private String secretKey;
@@ -44,7 +43,7 @@ public class HostAuthService {
 
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
         if(hostAuth.isPresent()){
-            return DefaultRes.res(StatusCode.BAD_REQUEST,ResponseMessages.DUPLICATED_HOST_EMAIL,String.format("이미 가입되어있는 이미엘 입니다.", hostEmail));
+            return DefaultRes.res(StatusCode.BAD_REQUEST,ResponseMessages.DUPLICATED_HOST_EMAIL);
         }
 
         // 회원 가입 진행 -> host 등록
@@ -55,7 +54,7 @@ public class HostAuthService {
 
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
         if(hostAuth.isPresent()){
-            DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND, String.format("존재하지 않는 이메일 입니다. %s", hostEmail));
+            DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND);
         }else{
             DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS, String.format("로그인 성공", hostEmail));
         }
@@ -66,7 +65,7 @@ public class HostAuthService {
         // 비밀 번호 체크
         //if(!userEntity.getPassword().equals(password)){
         if (!encoder.matches(password, hostAuth.get().getPassword())) {
-            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_PASSWORD,String.format("비밀번호가 일치하지 않습니다.. %s"));
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_PASSWORD);
 //            throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
         }
         // 토큰 생성
