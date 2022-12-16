@@ -57,7 +57,8 @@ public class HostService {
             quizMessage.setAction(QuizActionType.COMMAND);
             quizMessage.setCommand(QuizCommandType.START);
             quizMessage.setQuiz(quiz);
-            amqpTemplate.convertAndSend(quieExchange, quizMessage);
+            simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
+//            amqpTemplate.convertAndSend(quieExchange, "", quizMessage);
         } else {
 
         }
@@ -104,7 +105,8 @@ public class HostService {
 
             quizMessage.setCommand(QuizCommandType.RESULT);
             quizMessage.setAction(QuizActionType.COMMAND);
-            amqpTemplate.convertAndSend(quieExchange, quizMessage);
+            simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
+//            amqpTemplate.convertAndSend(quieExchange, "", quizMessage);
         }else{
             quizFinal(quizMessage);
         }
@@ -137,7 +139,8 @@ public class HostService {
         redisUtil.genKey(RedisPrefix.LOG.name(), quizMessage.getPinNum());
         quizMessage.setCommand(QuizCommandType.FINAL);
         quizMessage.setAction(QuizActionType.COMMAND);
-        amqpTemplate.convertAndSend(quieExchange, quizMessage);
+        simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
+//        amqpTemplate.convertAndSend(quieExchange,"" ,quizMessage);
     }
 
     public void userBan(QuizMessage quizMessage){
@@ -162,7 +165,8 @@ public class HostService {
 //            resMessage.setNickName(nickname);
 
         }
-        amqpTemplate.convertAndSend(quieExchange, quizMessage);
+        simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
+//        amqpTemplate.convertAndSend(quieExchange, "",quizMessage);
     }
 
 

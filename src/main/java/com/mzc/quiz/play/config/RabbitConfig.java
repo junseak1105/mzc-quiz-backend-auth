@@ -30,7 +30,6 @@ public class RabbitConfig {
     private int RabbitMQ_Port;
     public static final String quizQueue = "quiz.queue.fanout";
     public static final String quieExchange = "q.exchange";
-//    private static final String ROUTING_KEY = "pin.*";
 
     @Bean
     public Queue quizQueue(){

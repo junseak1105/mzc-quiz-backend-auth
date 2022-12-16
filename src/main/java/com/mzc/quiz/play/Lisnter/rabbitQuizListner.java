@@ -17,6 +17,7 @@ public class rabbitQuizListner {
 
     @RabbitListener(queues = quizQueue)
     public void consumeMessage(QuizMessage quizMessage){
+        System.out.println("**************** Rabbit MQ ******************");
         System.out.println("message Return : " + quizMessage);
         simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
     }

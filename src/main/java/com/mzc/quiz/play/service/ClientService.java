@@ -66,7 +66,8 @@ public class ClientService {
 
             quizMessage.setAction(QuizActionType.ROBBY);
             quizMessage.setCommand(QuizCommandType.BROADCAST);
-            amqpTemplate.convertAndSend(quieExchange, quizMessage);
+            simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
+//            amqpTemplate.convertAndSend(quieExchange, "",quizMessage);
         }
     }
 
