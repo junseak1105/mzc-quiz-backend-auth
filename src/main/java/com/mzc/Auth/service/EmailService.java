@@ -1,5 +1,9 @@
 package com.mzc.Auth.service;
 
+import com.mzc.global.Response.DefaultRes;
+import com.mzc.global.Response.ResponseMessages;
+import com.mzc.global.Response.StatusCode;
+import com.mzc.quiz.play.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +25,8 @@ import java.util.Random;
 public class EmailService {
     private final JavaMailSender javaMailSender;
 
+    private final RedisUtil redisUtil;
+
     //인증번호 생성
     private final String ePw = createKey();
 
@@ -33,7 +39,7 @@ public class EmailService {
         MimeMessage  message = javaMailSender.createMimeMessage();
 
         message.addRecipients(MimeMessage.RecipientType.TO, to); // to 보내는 대상
-        message.setSubject("MQuiz 회원가입 인증 코드: "); //메일 제목
+        message.setSubject("MQuiz 회원가입 인증 코드"); //메일 제목
 
         // 메일 내용 메일의 subtype을 html로 지정하여 html문법 사용 가능
         String msg="";
@@ -44,7 +50,7 @@ public class EmailService {
         msg += "</td></tr></tbody></table></div>";
 
         message.setText(msg, "utf-8", "html"); //내용, charset타입, subtype
-        message.setFrom(new InternetAddress(id,"prac_Admin")); //보내는 사람의 메일 주소, 보내는 사람 이름
+        message.setFrom(new InternetAddress(id,"MQuiz_Admin")); //보내는 사람의 메일 주소, 보내는 사람 이름
 
         return message;
     }
@@ -92,14 +98,36 @@ public class EmailService {
         MimeMessage 객체 안에 내가 전송할 메일의 내용을 담아준다.
         bean으로 등록해둔 javaMailSender 객체를 사용하여 이메일 send
      */
-    public String sendSimpleMessage(String to)throws Exception {
+//    public String sendSimpleMessage(String to)throws Exception {
+//        MimeMessage message = createMessage(to);
+//        try{
+//            javaMailSender.send(message); // 메일 발송
+//        }catch(MailException es){
+//            es.printStackTrace();
+//            throw new IllegalArgumentException();
+//        }
+//        return ePw; // 메일로 보냈던 인증 코드를 서버로 리턴
+//    }
+        public DefaultRes sendSimpleMessage(String to)throws Exception {
         MimeMessage message = createMessage(to);
         try{
+            //redisUtil.setDataExpire(ePw,to,60*1L);
             javaMailSender.send(message); // 메일 발송
         }catch(MailException es){
             es.printStackTrace();
-            throw new IllegalArgumentException();
+            //throw new IllegalArgumentException();
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.FAIL_EMAIL_SEND_AUTH_NUM); // 메일로 보냈던 인증 코드를 서버로 리턴
         }
-        return ePw; // 메일로 보냈던 인증 코드를 서버로 리턴
-    }
+            return DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
+        }
+
+        public DefaultRes verifyEmail(String key){
+        //String emailAuth = redisUtil.getData(key);
+        //if (emailAuth == null) {
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_EMAIL_SEND_AUTH_NUM); // 유효 하지 않은 이메일 인증 번호
+        }
+            //redisUtil.deleteData(key); // 인증 완료 된 인증 번호 삭제
+            //return DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
+    //}
+
 }

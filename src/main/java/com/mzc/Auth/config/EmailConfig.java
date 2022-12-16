@@ -17,7 +17,7 @@ public class EmailConfig {
     private String id;
     @Value("${spring.mail.password}")
     private String password;
-    @Value("${spring.mail.port}")
+    @Value("${spring.mail.host}")
     private String host;
     @Value("${spring.mail.port}")
     private int port;
@@ -39,9 +39,9 @@ public class EmailConfig {
         Properties properties = new Properties();
         properties.setProperty("mail.transport.protocol", "smtp"); // 프로토콜 설정
         properties.setProperty("mail.smtp.auth", "true"); // smtp 인증
-        properties.setProperty("mail.smtp.starttls.enable", "true"); // smtp starttls 사용
+        properties.setProperty("mail.smtp.starttls.enable", "true"); // smtp strattles 사용
         properties.setProperty("mail.debug", "true"); // 디버그 사용
-        properties.setProperty("mail.smtp.ssl.trust","smtp.mailplug.co.kr"); // ssl 인증 서버 주소
+        properties.setProperty("mail.smtp.ssl.trust","smtp.naver.com"); // ssl 인증 서버는 smtp.naver.com
         properties.setProperty("mail.smtp.ssl.enable","true"); // ssl 사용
         return properties;
     }

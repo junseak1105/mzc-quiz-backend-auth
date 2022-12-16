@@ -20,4 +20,10 @@ public class ResponseMessages {
 
     public static final String INVALID_PASSWORD = "비밀번호가 일치하지 않습니다.";
 
+    public static final String EMAIL_SEND_AUTH_NUM = "이메일 인증 번호 전송";
+
+    public static final String FAIL_EMAIL_SEND_AUTH_NUM = "이메일 인증 번호 전송 실패";
+
+    public static final String INVALID_EMAIL_SEND_AUTH_NUM = "유효하지 않은 인증 번호";
+
 }

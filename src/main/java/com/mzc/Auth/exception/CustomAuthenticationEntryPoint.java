@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    //유효하지 않은 토큰으로 접근하려고 할때 토큰 관리
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setContentType("application/json");
