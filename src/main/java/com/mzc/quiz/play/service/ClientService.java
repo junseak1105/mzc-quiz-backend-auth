@@ -11,6 +11,7 @@ import com.mzc.quiz.play.model.websocket.QuizMessage;
 import com.mzc.quiz.play.util.RedisPrefix;
 import com.mzc.quiz.play.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.security.Principal;
 import java.util.Base64;
 import java.util.List;
 
+import static com.mzc.quiz.play.config.RabbitConfig.quieExchange;
 import static com.mzc.quiz.play.config.StompWebSocketConfig.DIRECT;
 import static com.mzc.quiz.play.config.StompWebSocketConfig.TOPIC;
 
@@ -28,6 +30,8 @@ public class ClientService {
     private final RedisUtil redisUtil;
 
     private final SimpMessagingTemplate simpMessagingTemplate;
+
+    private final AmqpTemplate amqpTemplate;
 
     public DefaultRes joinRoom(QuizMessage quizMessage) {
         String pin = redisUtil.genKey(quizMessage.getPinNum());
@@ -62,7 +66,7 @@ public class ClientService {
 
             quizMessage.setAction(QuizActionType.ROBBY);
             quizMessage.setCommand(QuizCommandType.BROADCAST);
-            simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
+            amqpTemplate.convertAndSend(quieExchange, quizMessage);
         }
     }
 

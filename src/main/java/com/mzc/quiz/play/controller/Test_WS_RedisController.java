@@ -1,6 +1,7 @@
 package com.mzc.quiz.play.controller;
 
 import com.mzc.quiz.play.model.websocket.QuizMessage;
+import com.mzc.quiz.play.service.RabbitmqService;
 import com.mzc.quiz.play.service.Test_WS_RedisService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class Test_WS_RedisController {
     Test_WS_RedisService testWSRedisService;
 
     @Autowired
+    RabbitmqService rabbitmqService;
+
+    @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
 
@@ -31,7 +35,7 @@ public class Test_WS_RedisController {
 
     @MessageMapping("/Test")
     public void rabbitMQTest(@RequestBody QuizMessage quizMessage, Principal principal) {
-        testWSRedisService.RabbitMQTest(quizMessage);
+       rabbitmqService.publishQuizMessage(quizMessage);
     }
 
 }
