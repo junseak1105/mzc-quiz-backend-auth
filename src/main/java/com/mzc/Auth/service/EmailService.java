@@ -3,11 +3,13 @@ package com.mzc.Auth.service;
 import com.mzc.global.Response.DefaultRes;
 import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
-import com.mzc.quiz.play.util.RedisUtil;
+import com.mzc.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -126,7 +128,7 @@ public class EmailService {
 //        }
 //        return ePw; // 메일로 보냈던 인증 코드를 서버로 리턴
 //    }
-    public DefaultRes sendSimpleMessage(String to) throws Exception {
+    public ResponseEntity sendSimpleMessage(String to) throws Exception {
         MimeMessage message = createMessage(to);
         try{
             redisUtil.setDataExpire(ePw,to,60*1L);
@@ -134,17 +136,18 @@ public class EmailService {
         }catch(MailException es){
             es.printStackTrace();
             //throw new IllegalArgumentException();
-            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.FAIL_EMAIL_SEND_AUTH_NUM); // 메일로 보냈던 인증 코드를 서버로 리턴
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.FAIL_EMAIL_SEND_AUTH_NUM), HttpStatus.BAD_REQUEST);// 메일로 보냈던 인증 코드를 서버로 리턴
+
         }
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
+        return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw), HttpStatus.OK); // 메일로 보냈던 인증 코드를 서버로 리턴
     }
 
-    public DefaultRes verifyEmail(String key){
+    public ResponseEntity verifyEmail(String key){
         String emailAuth = redisUtil.getData(key);
         if (emailAuth == null) {
-        return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.AUTH_NUM_CHECK_INVALID_EMAIL_SEND_AUTH_NUM); // 유효 하지 않은 이메일 인증 번호
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.AUTH_NUM_CHECK_INVALID_EMAIL_SEND_AUTH_NUM), HttpStatus.BAD_REQUEST); // 유효 하지 않은 이메일 인증 번호
     }
     redisUtil.deleteData(key); // 인증 완료 된 인증 번호 삭제
-    return DefaultRes.res(StatusCode.OK, ResponseMessages.AUTH_NUM_CHECK_SUCCESS,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
+    return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.AUTH_NUM_CHECK_SUCCESS,emailAuth), HttpStatus.OK); // 메일로 보냈던 인증 코드를 서버로 리턴
     }
 }

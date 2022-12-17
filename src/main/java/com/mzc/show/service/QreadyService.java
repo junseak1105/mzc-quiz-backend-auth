@@ -2,13 +2,14 @@ package com.mzc.show.service;
 
 import com.mzc.global.Response.DefaultRes;
 import com.mzc.show.entity.Show;
+import org.springframework.http.ResponseEntity;
 
 public interface QreadyService {
 
-    DefaultRes  getShowList(String email);
-    DefaultRes  getShow(String showId);
-    DefaultRes  createShow(Show show);
-    DefaultRes  deleteShow(String showId);
+    ResponseEntity  getShowList(String email);
+    ResponseEntity  getShow(String showId);
+    ResponseEntity  createShow(Show show);
+    ResponseEntity deleteShow(String showId);
 
 //    public DefaultRes showSave(Show show);
 //

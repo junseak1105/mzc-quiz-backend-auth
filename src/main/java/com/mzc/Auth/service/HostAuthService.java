@@ -9,6 +9,8 @@ import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import springfox.documentation.service.ResponseMessage;
@@ -33,7 +35,7 @@ public class HostAuthService {
 //                new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("hostEmail is %s", hostEmail)));
 //    }
 
-    public DefaultRes join(String hostEmail, String password, String nickName) {
+    public ResponseEntity join(String hostEmail, String password, String nickName) {
         // 회원 가입 여부 체크
 //        hostAuthRepository.findByHostEmail(hostEmail).ifPresent(it -> {
 //            throw new ApplicationException(ErrorCode.DUPLICATED_HOST_EMAIL, String.format("hostEmail is %s", hostEmail));
@@ -41,27 +43,27 @@ public class HostAuthService {
 
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
         if(hostAuth.isPresent()){
-            return DefaultRes.res(StatusCode.BAD_REQUEST,ResponseMessages.DUPLICATED_HOST_EMAIL);
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.DUPLICATED_HOST_EMAIL), HttpStatus.BAD_REQUEST);
         }
 
         // 회원 가입 진행 -> host 등록
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password),nickName))));
+        return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password),nickName)))), HttpStatus.OK);
     }
 
-    public DefaultRes checkHostEmail(String hostEmail) {
+    public ResponseEntity checkHostEmail(String hostEmail) {
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
         if(hostAuth.isPresent()){
-            return DefaultRes.res(StatusCode.BAD_REQUEST,ResponseMessages.DUPLICATED_HOST_EMAIL);
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.DUPLICATED_HOST_EMAIL), HttpStatus.BAD_REQUEST);
         }
         // 회원 가입 진행 -> host 등록
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.HOST_EMAIL_CHECK_OK);
+        return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.HOST_EMAIL_CHECK_OK), HttpStatus.OK);
     }
 
-    public DefaultRes login(String hostEmail, String password) {
+    public ResponseEntity login(String hostEmail, String password) {
 
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
         if(hostAuth.isPresent()){
-            DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND);
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND), HttpStatus.BAD_REQUEST);
         }else{
             DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS);
         }
@@ -72,10 +74,10 @@ public class HostAuthService {
         // 비밀 번호 체크
         //if(!userEntity.getPassword().equals(password)){
         if (!encoder.matches(password, hostAuth.get().getPassword())) {
-            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_PASSWORD);
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_PASSWORD), HttpStatus.BAD_REQUEST);
 //            throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
         }
         // 토큰 생성
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.CREATE_TOKEN, JwtTokenUtils.generateToken(hostEmail, secretKey, expiredTimeMx));
+        return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.CREATE_TOKEN, JwtTokenUtils.generateToken(hostEmail, secretKey, expiredTimeMx)), HttpStatus.OK);
     }
 }
