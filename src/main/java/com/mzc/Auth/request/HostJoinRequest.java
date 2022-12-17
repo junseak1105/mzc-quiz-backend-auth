@@ -9,4 +9,5 @@ public class HostJoinRequest {
     private String hostEmail;
     private String password;
     private String nickName;
+    private String authNum;
 }

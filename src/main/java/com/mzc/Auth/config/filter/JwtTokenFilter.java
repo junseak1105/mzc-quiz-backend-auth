@@ -50,12 +50,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             String hostEmail = JwtTokenUtils.getHostEmail(token,key);
 
             // hostEmail 유효 체크
-            Host host = hostAuthService.loadFindByHostEmail(hostEmail);
+            //Host host = hostAuthService.loadFindByHostEmail(hostEmail);
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    host, null, host.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+//                    host, null, host.getAuthorities());
+//            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
 
         }catch (RuntimeException e){
             log.error("Error occurs while validating. {}", e.toString());

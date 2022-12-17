@@ -33,14 +33,20 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // mysql
+    // Mysql
     implementation 'mysql:mysql-connector-java'
+
+    // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    // jwt 토큰
+    // Jwt Token
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+
+    // Email
+    implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.1'
+
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
