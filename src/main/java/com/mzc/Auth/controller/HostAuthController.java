@@ -44,6 +44,12 @@ public class HostAuthController {
         return hostAuthService.join(request.getHostEmail(),request.getPassword(),request.getNickName());
     }
 
+    @ApiOperation(value = "호스트 이메일 중복 확인", notes = "필수 데이터 : hostEmail")
+    @PostMapping("/join/checkHostEmail")
+    public DefaultRes checkHostEmail(@RequestBody HostJoinRequest request){
+        return hostAuthService.checkHostEmail(request.getHostEmail());
+    }
+
 //    @PostMapping("/join/mailConfirm")
 //    @ResponseBody
 //    public String mailConfirm(@RequestBody HostJoinRequest request) throws Exception {

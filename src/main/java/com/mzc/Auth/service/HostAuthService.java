@@ -48,6 +48,15 @@ public class HostAuthService {
         return DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password),nickName))));
     }
 
+    public DefaultRes checkHostEmail(String hostEmail) {
+        Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
+        if(hostAuth.isPresent()){
+            return DefaultRes.res(StatusCode.BAD_REQUEST,ResponseMessages.DUPLICATED_HOST_EMAIL);
+        }
+        // 회원 가입 진행 -> host 등록
+        return DefaultRes.res(StatusCode.OK, ResponseMessages.HOST_EMAIL_CHECK_OK);
+    }
+
     public DefaultRes login(String hostEmail, String password) {
 
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);

@@ -16,7 +16,7 @@ public class ResponseMessages {
 
     public static final String HOST_EMAIL_NOT_FOUND = "해당 이메일 찾을 수 없습니다.";
 
-    public static final String INVALID_PERMISSION = "해당 이메일 권한이 유효하지 않습니다.";
+    public static final String HOST_EMAIL_CHECK_OK = "해당 이메일은 사용 가능 합니다.";
 
     public static final String INVALID_PASSWORD = "비밀번호가 일치하지 않습니다.";
 
