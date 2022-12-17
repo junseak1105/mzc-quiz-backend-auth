@@ -230,4 +230,15 @@ public class HostService {
 //        }
         return false;
     }
+
+    public void playEnd(QuizMessage quizMessage) {
+        String pin = quizMessage.getPinNum();
+        String playKey = redisUtil.genKey(pin);
+        String quizKey = redisUtil.genKey(RedisPrefix.QUIZ.name(), pin);
+
+        redisUtil.DEL(playKey);
+        redisUtil.DEL(quizKey);
+
+        simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
+    }
 }
