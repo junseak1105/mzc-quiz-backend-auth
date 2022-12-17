@@ -11,6 +11,7 @@ import com.mzc.quiz.play.model.websocket.QuizMessage;
 import com.mzc.quiz.play.util.RedisPrefix;
 import com.mzc.quiz.play.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.security.Principal;
 import java.util.Base64;
 import java.util.List;
 
+import static com.mzc.quiz.play.config.RabbitConfig.quieExchange;
 import static com.mzc.quiz.play.config.StompWebSocketConfig.DIRECT;
 import static com.mzc.quiz.play.config.StompWebSocketConfig.TOPIC;
 
@@ -29,6 +31,8 @@ public class ClientService {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
 
+    private final AmqpTemplate amqpTemplate;
+
     public DefaultRes joinRoom(QuizMessage quizMessage) {
         String pin = redisUtil.genKey(quizMessage.getPinNum());
         if (redisUtil.hasKey(pin)) {
@@ -37,7 +41,6 @@ public class ClientService {
             return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessages.BAD_REQUEST);
         }
     }
-
 
     public void setNickname(Principal principal, QuizMessage quizMessage) {
         String playKey = redisUtil.genKey(RedisPrefix.USER.name(),quizMessage.getPinNum());
@@ -60,9 +63,19 @@ public class ClientService {
             // 보낸 유저한테만 다시 보내주고
             simpMessagingTemplate.convertAndSendToUser(principal.getName(), DIRECT + quizMessage.getPinNum(), quizMessage);
 
+            // LOG:핀번호 - 유저수
+            String logKey = redisUtil.genKey(RedisPrefix.LOG.name(), quizMessage.getPinNum());
+            if(userList.size() == 1){
+                redisUtil.leftPush(logKey,Integer.toString(userList.size()));
+            }
+            else{
+                redisUtil.listDataSet(logKey, 0,Integer.toString(userList.size()));
+            }
+
             quizMessage.setAction(QuizActionType.ROBBY);
             quizMessage.setCommand(QuizCommandType.BROADCAST);
             simpMessagingTemplate.convertAndSend(TOPIC + quizMessage.getPinNum(), quizMessage);
+//            amqpTemplate.convertAndSend(quieExchange, "",quizMessage);
         }
     }
 
@@ -73,7 +86,7 @@ public class ClientService {
         Gson gson = new Gson();
         Quiz quiz = gson.fromJson(QuizDataToString, Quiz.class);
 
-        //계산식: [ (TotalTime - 걸린시간) / TotalTime ] * 1000 * Rate * IsCorrect(0 or 1)
+
         double TotalTime = quiz.getTime();
         double AnswerTime = Integer.parseInt(quizMessage.getSubmit().getAnswerTime());
         double Rate = (int) quiz.getRate();
@@ -97,14 +110,27 @@ public class ClientService {
             }
         }
 
+//        // 문제별 정답/오답 저장
+//        // 문제 제출하면 isCorrect를 저장
+//        // 근데 제출한 후에 건너뛰기를 했을 경우, SKIP에서 모든 유저 해당문제 -1로 처리
+//        String quizCollectKey=redisUtil.genKey("ANSWERCORRECT", quizMessage.getPinNum());
+//        if(redisUtil.hasKey(quizCollectKey)){ // 키값이 있을 때
+//            // 저장되어있는 데이터 + , + 정답여부
+//            String quizCorrectData = redisUtil.GetHashData(quizCollectKey, quizMessage.getNickName()).toString() + ',' + isCorrect;
+//            System.out.println("Client_quizCorrectData : " + quizCorrectData);
+//            redisUtil.setHashData(quizCollectKey, quizMessage.getNickName(), quizCorrectData);
+//        }
+//        else{ // 키값이 없을 때
+//            redisUtil.setHashData(quizCollectKey, quizMessage.getNickName(), Integer.toString(isCorrect));
+//        }
+
         System.out.println("TotalTime : " + TotalTime);
         System.out.println("AnswerTime : " + AnswerTime);
         System.out.println("Rate : " + Rate);
         System.out.println("isCorrect : " + isCorrect);
 
-        double Score = ((TotalTime - AnswerTime) / TotalTime) * 1000 * Rate * isCorrect;
+        double Score = ((TotalTime*1000 - AnswerTime) / (TotalTime*1000)) * 1000 * Rate * isCorrect;
 
-        System.out.println(Score);
 
         // Result:키값 시작할 때 먼저 생성해놓는게 좋겠죠?
         // 랭킹점수 증가
