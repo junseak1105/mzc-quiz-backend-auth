@@ -108,7 +108,7 @@ public class EmailService {
 //        }
 //        return ePw; // 메일로 보냈던 인증 코드를 서버로 리턴
 //    }
-        public DefaultRes sendSimpleMessage(String to)throws Exception {
+    public DefaultRes sendSimpleMessage(String to) throws Exception {
         MimeMessage message = createMessage(to);
         try{
             //redisUtil.setDataExpire(ePw,to,60*1L);
@@ -118,16 +118,16 @@ public class EmailService {
             //throw new IllegalArgumentException();
             return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.FAIL_EMAIL_SEND_AUTH_NUM); // 메일로 보냈던 인증 코드를 서버로 리턴
         }
-            return DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
-        }
+        return DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
+    }
 
-        public DefaultRes verifyEmail(String key){
-        //String emailAuth = redisUtil.getData(key);
-        //if (emailAuth == null) {
-            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_EMAIL_SEND_AUTH_NUM); // 유효 하지 않은 이메일 인증 번호
-        }
-            //redisUtil.deleteData(key); // 인증 완료 된 인증 번호 삭제
-            //return DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
+//    public DefaultRes verifyEmail(String key){
+//        //String emailAuth = redisUtil.getData(key);
+//        //if (emailAuth == null) {
+//        return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_EMAIL_SEND_AUTH_NUM); // 유효 하지 않은 이메일 인증 번호
+//    }
+    //redisUtil.deleteData(key); // 인증 완료 된 인증 번호 삭제
+    //return DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
     //}
 
 }

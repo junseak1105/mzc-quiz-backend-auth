@@ -44,9 +44,15 @@ public class HostAuthController {
         return hostAuthService.join(request.getHostEmail(),request.getPassword(),request.getNickName());
     }
 
+//    @PostMapping("/join/mailConfirm")
+//    @ResponseBody
+//    public String mailConfirm(@RequestBody HostJoinRequest request) throws Exception {
+//        String code = emailService.sendSimpleMessage(request.getHostEmail());
+//        log.info("인증코드 : " + code);
+//        return code;
+//    }
     @ApiOperation(value = "호스트 회원가입 이메일 인증", notes = "필수 데이터 : hostEmail")
     @PostMapping("/join/mailConfirm")
-    @ResponseBody
     public DefaultRes mailConfirm(@RequestBody HostJoinRequest request) throws Exception {
 //        String code = emailService.sendSimpleMessage(email);
 //        log.info("인증코드 : " + code);
@@ -59,8 +65,6 @@ public class HostAuthController {
         return hostAuthService.login(request.getHostEmail(), request.getPassword());
 
     }
-
-
 
 //    @GetMapping("/host")
 //    public DefaultRes host(Authentication authentication) {

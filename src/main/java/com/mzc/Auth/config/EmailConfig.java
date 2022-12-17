@@ -1,6 +1,7 @@
 package com.mzc.Auth.config;
 
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
+@Log4j2
 @Configuration
 @PropertySource("classpath:application.properties")
 public class EmailConfig {
@@ -25,7 +27,6 @@ public class EmailConfig {
     @Bean
     public JavaMailSender javaMailService() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-
         javaMailSender.setHost(host); // smtp 서버 주소
         javaMailSender.setUsername(id); // 설정(발신) 메일 아이디
         javaMailSender.setPassword(password); // 설정(발신) 메일 패스워드
