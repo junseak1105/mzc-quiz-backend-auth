@@ -42,16 +42,34 @@ public class EmailService {
         message.setSubject("MQuiz 회원가입 인증 코드"); //메일 제목
 
         // 메일 내용 메일의 subtype을 html로 지정하여 html문법 사용 가능
-        String msg="";
-        msg += "<h1 style=\"font-size: 30px; padding-right: 30px; padding-left: 30px;\">이메일 주소 확인</h1>";
-        msg += "<p style=\"font-size: 17px; padding-right: 30px; padding-left: 30px;\">아래 확인 코드를 회원가입 화면에서 입력해주세요.</p>";
-        msg += "<div style=\"padding-right: 30px; padding-left: 30px; margin: 32px 0 40px;\"><table style=\"border-collapse: collapse; border: 0; background-color: #F4F4F4; height: 70px; table-layout: fixed; word-wrap: break-word; border-radius: 6px;\"><tbody><tr><td style=\"text-align: center; vertical-align: middle; font-size: 30px;\">";
-        msg += ePw;
-        msg += "</td></tr></tbody></table></div>";
+//        String msg="";
+//        msg += "<h1 style=\"font-size: 30px; padding-right: 30px; padding-left: 30px;\">이메일 주소 확인</h1>";
+//        msg += "<p style=\"font-size: 17px; padding-right: 30px; padding-left: 30px;\">아래 확인 코드를 회원가입 화면에서 입력해주세요.</p>";
+//        msg += "<div style=\"padding-right: 30px; padding-left: 30px; margin: 32px 0 40px;\"><table style=\"border-collapse: collapse; border: 0; background-color: #F4F4F4; height: 70px; table-layout: fixed; word-wrap: break-word; border-radius: 6px;\"><tbody><tr><td style=\"text-align: center; vertical-align: middle; font-size: 30px;\">";
+//        msg += ePw;
+//        msg += "</td></tr></tbody></table></div>";
+//
+//        message.setText(msg, "utf-8", "html"); //내용, charset타입, subtype
+//        message.setFrom(new InternetAddress(id,"MQuiz_Admin")); //보내는 사람의 메일 주소, 보내는 사람 이름
 
-        message.setText(msg, "utf-8", "html"); //내용, charset타입, subtype
-        message.setFrom(new InternetAddress(id,"MQuiz_Admin")); //보내는 사람의 메일 주소, 보내는 사람 이름
-
+        String msg = "";
+        msg += "<div style='margin:100px;'>";
+        msg += "<h1> 안녕하세요</h1>";
+        msg += "<h1> 엠퀴즈 입니다.</h1>";
+        msg += "<br>";
+        msg += "<p>아래 코드를 회원가입 창으로 돌아가 입력해주세요<p>";
+        msg += "<br>";
+        msg += "<p>엠퀴즈를 찾아주셔서 감사합니다!<p>";
+        msg += "<br>";
+        msg += "<div align='center' style='border:1px solid black; font-family:verdana';>";
+        msg += "<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>";
+        msg += "<div style='font-size:130%'>";
+        msg += "CODE : <strong>";
+        msg += ePw + "</strong><div><br/> "; // 메일에 인증번호 넣기
+        msg += "</div>";
+        message.setText(msg, "utf-8", "html");// 내용, charset 타입, subtype
+        // 보내는 사람의 이메일 주소, 보내는 사람 이름
+        message.setFrom(new InternetAddress(id, "MQuiz_Admin"));// 보내는 사람
         return message;
     }
 
@@ -111,7 +129,7 @@ public class EmailService {
     public DefaultRes sendSimpleMessage(String to) throws Exception {
         MimeMessage message = createMessage(to);
         try{
-            //redisUtil.setDataExpire(ePw,to,60*1L);
+            redisUtil.setDataExpire(ePw,to,60*1L);
             javaMailSender.send(message); // 메일 발송
         }catch(MailException es){
             es.printStackTrace();
@@ -121,13 +139,12 @@ public class EmailService {
         return DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
     }
 
-//    public DefaultRes verifyEmail(String key){
-//        //String emailAuth = redisUtil.getData(key);
-//        //if (emailAuth == null) {
-//        return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_EMAIL_SEND_AUTH_NUM); // 유효 하지 않은 이메일 인증 번호
-//    }
-    //redisUtil.deleteData(key); // 인증 완료 된 인증 번호 삭제
-    //return DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
-    //}
-
+    public DefaultRes verifyEmail(String key){
+        String emailAuth = redisUtil.getData(key);
+        if (emailAuth == null) {
+        return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.AUTH_NUM_CHECK_INVALID_EMAIL_SEND_AUTH_NUM); // 유효 하지 않은 이메일 인증 번호
+    }
+    redisUtil.deleteData(key); // 인증 완료 된 인증 번호 삭제
+    return DefaultRes.res(StatusCode.OK, ResponseMessages.AUTH_NUM_CHECK_SUCCESS,ePw); // 메일로 보냈던 인증 코드를 서버로 리턴
+    }
 }

@@ -59,6 +59,12 @@ public class HostAuthController {
         return emailService.sendSimpleMessage(request.getHostEmail());
     }
 
+    @ApiOperation(value = "호스트 회원가입 이메일 인증번호 확인", notes = "필수 데이터 : authNum")
+    @PostMapping("/join/verifyEmail")
+    public DefaultRes verifyEmail(@RequestBody HostJoinRequest request){
+        return emailService.verifyEmail(request.getAuthNum());
+    }
+
     @ApiOperation(value = "호스트 로그인", notes = "필수 데이터 : hostEmail, password")
     @PostMapping("/login")
     public DefaultRes login(@RequestBody HostLoginRequest request) {

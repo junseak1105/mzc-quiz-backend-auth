@@ -24,6 +24,8 @@ public class ResponseMessages {
 
     public static final String FAIL_EMAIL_SEND_AUTH_NUM = "이메일 인증 번호 전송 실패";
 
-    public static final String INVALID_EMAIL_SEND_AUTH_NUM = "유효하지 않은 인증 번호";
+    public static final String AUTH_NUM_CHECK_SUCCESS = "유효한 이메일 입니다. 이메일 인증 성공";
+    
+    public static final String AUTH_NUM_CHECK_INVALID_EMAIL_SEND_AUTH_NUM = "유효하지 않은 인증 번호";
 
 }
