@@ -62,10 +62,11 @@ public class HostAuthService {
     public ResponseEntity login(String hostEmail, String password) {
 
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
-        if(hostAuth.isPresent()){
+        if(!hostAuth.isPresent()){
             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND), HttpStatus.BAD_REQUEST);
         }else{
-            DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS);
+            //return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS), HttpStatus.OK);
+            //DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS);
         }
 
         // 회원가입 여부 체크
