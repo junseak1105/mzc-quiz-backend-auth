@@ -1,6 +1,6 @@
-package com.mzc.show.repository;
+package deprecated.show.repository;
 
-import com.mzc.show.entity.Show;
+import deprecated.show.entity.Show;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

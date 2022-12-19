@@ -1,4 +1,4 @@
-package com.mzc.show.request;
+package deprecated.show.request;
 
 
 import io.swagger.annotations.ApiModelProperty;

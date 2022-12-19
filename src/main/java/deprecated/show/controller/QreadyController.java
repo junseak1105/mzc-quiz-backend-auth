@@ -1,16 +1,10 @@
-package com.mzc.show.controller;
+package deprecated.show.controller;
 
-import com.mzc.global.Response.DefaultRes;
-import com.mzc.global.Response.ResponseMessages;
-import com.mzc.global.Response.StatusCode;
-import com.mzc.show.entity.Choice;
-import com.mzc.show.entity.Quiz;
-import com.mzc.show.entity.Show;
-import com.mzc.show.service.QreadyService;
+import deprecated.show.entity.Show;
+import deprecated.show.service.QreadyService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

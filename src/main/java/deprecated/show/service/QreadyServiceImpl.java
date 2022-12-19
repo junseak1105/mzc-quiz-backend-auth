@@ -1,11 +1,11 @@
-package com.mzc.show.service;
+package deprecated.show.service;
 
 import com.mzc.global.Response.DefaultRes;
 import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
-import com.mzc.show.entity.Show;
-import com.mzc.show.repository.QreadyRepository;
-import com.mzc.show.response.ShowListRes;
+import deprecated.show.entity.Show;
+import deprecated.show.repository.QreadyRepository;
+import deprecated.show.response.ShowListRes;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;

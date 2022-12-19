@@ -1,4 +1,4 @@
-package com.mzc.show.entity;
+package deprecated.show.entity;
 
 import lombok.Data;
 

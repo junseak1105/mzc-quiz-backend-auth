@@ -1,7 +1,6 @@
-package com.mzc.show.service;
+package deprecated.show.service;
 
-import com.mzc.global.Response.DefaultRes;
-import com.mzc.show.entity.Show;
+import deprecated.show.entity.Show;
 import org.springframework.http.ResponseEntity;
 
 @Deprecated
