@@ -4,6 +4,7 @@ import com.mzc.global.Response.DefaultRes;
 import com.mzc.show.entity.Show;
 import org.springframework.http.ResponseEntity;
 
+@Deprecated
 public interface QreadyService {
 
     ResponseEntity  getShowList(String email);

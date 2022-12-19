@@ -3,6 +3,7 @@ package com.mzc.show.response;
 import com.mzc.show.entity.QuizInfo;
 import lombok.*;
 
+@Deprecated
 @Getter
 @Setter
 @AllArgsConstructor

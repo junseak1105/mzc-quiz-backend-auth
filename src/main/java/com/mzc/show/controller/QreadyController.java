@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Deprecated
 @RestController
 @RequestMapping("/v1/show")
 @Log4j2

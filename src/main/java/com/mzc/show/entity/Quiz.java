@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.util.List;
 
+@Deprecated
 @Data
 public class Quiz {
     private int num;

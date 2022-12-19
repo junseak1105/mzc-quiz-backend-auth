@@ -5,6 +5,7 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
+@Deprecated
 @Data
 public class QuizInfo {
 

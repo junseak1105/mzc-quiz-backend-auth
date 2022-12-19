@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
+@Deprecated
 public interface QreadyRepository extends MongoRepository<Show, String> {
     Show save(Show show);
     Show findShowById(String Id);

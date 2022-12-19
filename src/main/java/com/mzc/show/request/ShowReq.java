@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.bson.types.ObjectId;
 
+@Deprecated
 @Getter
 @Setter
 @AllArgsConstructor

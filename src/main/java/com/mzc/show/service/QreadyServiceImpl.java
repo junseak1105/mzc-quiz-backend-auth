@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 @Component
 @Log4j2
 public class QreadyServiceImpl implements QreadyService {
