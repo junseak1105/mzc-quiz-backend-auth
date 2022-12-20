@@ -1,7 +1,7 @@
 package com.mzc.Auth.service;
 
 import com.mzc.Auth.entity.HostAuth;
-import com.mzc.Auth.model.Host;
+import com.mzc.Auth.entity.Host;
 import com.mzc.Auth.repository.HostAuthRepository;
 import com.mzc.Auth.util.JwtTokenUtils;
 import com.mzc.global.Response.DefaultRes;
@@ -11,9 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import springfox.documentation.service.ResponseMessage;
 
 import java.util.Optional;
 
@@ -33,6 +34,12 @@ public class HostAuthService {
 //    public Host loadFindByHostEmail(String hostEmail) {
 //        return hostAuthRepository.findByHostEmail(hostEmail).map(Host::fromEntity).orElseThrow(() ->
 //                new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("hostEmail is %s", hostEmail)));
+//    }
+
+//    @Override
+//    public UserDetails loadUserByUsername(String hostEmail) throws UsernameNotFoundException {
+//        return (UserDetails) hostAuthRepository.findByHostEmail(hostEmail).orElseThrow(
+//                ()->new UsernameNotFoundException(hostEmail));
 //    }
 
     public ResponseEntity join(String hostEmail, String password, String nickName) {

@@ -1,21 +1,15 @@
 package com.mzc.Auth.controller;
 
-import com.mzc.Auth.model.Host;
 import com.mzc.Auth.request.HostJoinRequest;
 import com.mzc.Auth.request.HostLoginRequest;
-import com.mzc.Auth.response.HostJoinReponse;
-import com.mzc.Auth.response.HostLoginResponse;
-import com.mzc.Auth.response.HostResponse;
-import com.mzc.Auth.response.Response;
 import com.mzc.Auth.service.EmailService;
 import com.mzc.Auth.service.HostAuthService;
-import com.mzc.global.Response.DefaultRes;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 @Log4j2
 @RestController
@@ -82,5 +76,11 @@ public class HostAuthController {
 //    @GetMapping("/host")
 //    public DefaultRes host(Authentication authentication) {
 //        return hostAuthService.loadFindByHostEmail(authentication.getName());
+//    }
+
+//    @ResponseBody
+//    @GetMapping("/auth")
+//    public Authentication auth(){
+//        return SecurityContextHolder.getContext().getAuthentication();
 //    }
 }

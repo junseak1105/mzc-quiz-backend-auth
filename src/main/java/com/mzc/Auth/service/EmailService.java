@@ -54,6 +54,44 @@ public class EmailService {
 //        message.setText(msg, "utf-8", "html"); //내용, charset타입, subtype
 //        message.setFrom(new InternetAddress(id,"MQuiz_Admin")); //보내는 사람의 메일 주소, 보내는 사람 이름
 
+//        String msg = "<div align=\"center\" style=\"text-align: center;\"><span style=\"font-size: 24pt; font-family: arial, sans-serif;\">"
+//                + "<b>회원가입을 축하드립니다.</b></span></div><div align=\"center\" style=\"text-align: center;\">"
+//                + "<p align=\"center\" style=\"font-family: 돋움, Dotum, Helvetica, Apple SD Gothic Neo, sans-serif; font-size: 12px;\"><span style=\"font-size: 10pt; font-family: arial, sans-serif;\">.</span></p>"
+//                + "<p align=\"center\" style=\"font-family: 돋움, Dotum, Helvetica, Apple SD Gothic Neo, sans-serif; font-size: 12px;\"><span style=\"font-size: 10pt; font-family: arial, sans-serif;\">!</span></p>"
+//                + "<p align=\"center\" style=\"font-family: 돋움, Dotum, Helvetica, Apple SD Gothic Neo, sans-serif; font-size: 12px;\"><span style=\"font-size: 12pt; font-family: arial, sans-serif;\">"
+//                + "코드 번호 : <span style=\"background-color: rgb(255, 255, 255); font-size: 12pt; color: rgb(0, 0, 0); font-family: arial, sans-serif;\"><u>WELCOME123</u></span></span></p>"
+//                + "<p align=\"center\" style=\"font-family: 돋움, Dotum, Helvetica, Apple SD Gothic Neo, sans-serif; font-size: 12px;\">"
+//                + "<span style=\"font-size: 12pt; font-family: arial, sans-serif;\"><span style=\"background-color: rgb(255, 255, 255); font-size: 12pt; color: rgb(0, 0, 0); font-family: arial, sans-serif;\"><br></span>"
+//                + "</span></p></div><div align=\"center\" style=\"text-align: center;\"><img src=\"https://image.flaticon.com/icons/png/512/1169/1169905.png\" alt=\"Coupons free icon\" style=\"width=\" height=\"240\"><br></div>"
+//                + "<div align=\"center\" style=\"text-align: center;\"><br></div><div align=\"center\" style=\"text-align: center;\">"
+//                + "<form action=\"http://localhost:8080/myweb2/main.sh\" method=\"get\"><input type=\"submit\" value=\"쿠폰 등록하러가기\" style=\"border:1px solid #f4f4f4; padding: 7px 15px; border-radius:8px; background-color: rgb(81, 143, 187);color:white; cursor: pointer;\"></form></div>"; // 내용
+
+//        String content = "<p align=\"center\" style=\"text-align: center; \">&nbsp;<span style=\"font-size: 10pt;\">&nbsp;</span></p><p align=\"center\" style=\"text-align: center; \">"
+//                + "<img src=\"https://postfiles.pstatic.net/MjAyMTA4MDRfMTA3/MDAxNjI4MDU3ODE4MDM3.dQGrbYYH-OB9Pi7lo8CDH97BbHOhbvmWRLB66QJkbcAg.0Xx2qYIHIMjO6hGspDI-Z5M7kCNLnBL7EgK54rpZl3og.JPEG.honamory/logo_proto_1.jpg?type=w966\" loading=\"lazy\"></p>"
+//                + "<p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p>"
+//                + "<p align=\"center\" style=\"text-align: center; \"><span style=\"font-family: dotum, sans-serif;\">안녕하세요 회원님,</span></p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p>"
+//                + "<p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \"><span style=\"font-family: dotum, sans-serif;\">회원님의 임시 비밀번호를&nbsp;</span></p><p align=\"center\" style=\"text-align: center; \">"
+//                + "<span style=\"font-family: dotum, sans-serif;\">아래와 같이 전달해 드립니다.</span></p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p>"
+//                + "<p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">"
+//                + "<b><span style=\"font-size: 9pt; font-family: dotum, sans-serif;\">임시 비밀번호:&nbsp;</span>"
+//                + "</b><span style=\"font-family: dotum, sans-serif; font-size: 9pt;\">["+tempPass+"]</span>" //임시비밀번호!!
+//                + "</p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">"
+//                + "&nbsp;</p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">"
+//                + "<span style=\"font-family: dotum, sans-serif;\">이 비밀번호로 로그인 하셔서</span></p><p align=\"center\" style=\"text-align: center; \">"
+//                + "<span style=\"font-family: dotum, sans-serif;\">새로운 비밀번호로&nbsp;</span></p>"
+//                + "<p align=\"center\" style=\"text-align: center; \"><span style=\"font-family: dotum, sans-serif;\">변경하여 주시기 바랍니다.</span>"
+//                + "</p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p>"
+//                + "<p align=\"center\" style=\"text-align: center; \"><span style=\"font-family: dotum, sans-serif;\">"
+//                + "<b><a href=\"http://localhost:8080/myweb2/login.sh\" target=\"_blank\" style=\"cursor: pointer; white-space: pre;\" rel=\"noreferrer noopener\">"
+//                + "로그인 하러 가기</a><span></span></b></span></p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p>"
+//                + "<p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">"
+//                + "<span style=\"font-family: dotum, sans-serif;\">※비밀번호 찾기 신청을&nbsp;</span><span style=\"font-size: 10pt; font-family: dotum, sans-serif;\">하시지 않았다면</span></p>"
+//                + "<p align=\"center\" style=\"text-align: center; \"><span style=\"font-family: dotum, sans-serif;\"><span></span><a href=\"http://localhost:8080/myweb2/notice.sh\" target=\"_blank\" style=\"cursor: pointer; white-space: pre;\" rel=\"noreferrer noopener\">"
+//                + "고객센터</a><span></span>로 연락해 주세요.</span></p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">&nbsp;</p><p align=\"center\" style=\"text-align: center; \">"
+//                + "<span style=\"font-size: 10pt;\">&nbsp;</span>&nbsp;</p>\r\n"
+//                + "\r\n"
+//                + "";
+
         String msg = "";
         msg += "<div style='margin:100px;'>";
         msg += "<h1> 안녕하세요</h1>";
