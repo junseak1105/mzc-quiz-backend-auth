@@ -46,10 +46,6 @@ public class HostAuthService implements UserDetailsService{
 
     public ResponseEntity join(String hostEmail, String password, String nickName) {
         // 회원 가입 여부 체크
-//        hostAuthRepository.findByHostEmail(hostEmail).ifPresent(it -> {
-//            throw new ApplicationException(ErrorCode.DUPLICATED_HOST_EMAIL, String.format("hostEmail is %s", hostEmail));
-//        });
-
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
         if(hostAuth.isPresent()){
             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.DUPLICATED_HOST_EMAIL), HttpStatus.BAD_REQUEST);
@@ -71,6 +67,7 @@ public class HostAuthService implements UserDetailsService{
     public ResponseEntity login(String hostEmail, String password) {
 
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
+
         if(!hostAuth.isPresent()){
             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND), HttpStatus.BAD_REQUEST);
         }else{
@@ -78,14 +75,9 @@ public class HostAuthService implements UserDetailsService{
             //DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS);
         }
 
-        // 회원가입 여부 체크
-        //HostAuth hostAuth = hostAuthRepository.findByHostEmail(hostEmail).orElseThrow(() -> new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("not founded %s", hostEmail)));
-
         // 비밀 번호 체크
-        //if(!userEntity.getPassword().equals(password)){
         if (!encoder.matches(password, hostAuth.get().getPassword())) {
             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_PASSWORD), HttpStatus.BAD_REQUEST);
-//            throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
         }
         // 토큰 생성
         return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.CREATE_TOKEN, JwtTokenUtils.generateToken(hostEmail, secretKey, expiredTimeMx)), HttpStatus.OK);
