@@ -2,7 +2,7 @@ package com.mzc.Auth.config;
 
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.mzc.Auth.model.Host;
+import com.mzc.Auth.entity.Host;
 import com.mzc.Auth.service.HostAuthService;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpHeaders;

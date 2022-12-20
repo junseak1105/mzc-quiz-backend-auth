@@ -1,5 +1,6 @@
 package com.mzc.Auth.service;
 
+import com.mzc.Auth.config.JWTUtil;
 import com.mzc.Auth.entity.HostAuth;
 import com.mzc.Auth.entity.Host;
 import com.mzc.Auth.repository.HostAuthRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,8 +22,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class HostAuthService {
-
+public class HostAuthService implements UserDetailsService{
+    //    public class HostAuthService implements UserDetailsService {
     private final HostAuthRepository hostAuthRepository;
     private final BCryptPasswordEncoder encoder;
 
@@ -36,11 +38,11 @@ public class HostAuthService {
 //                new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("hostEmail is %s", hostEmail)));
 //    }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String hostEmail) throws UsernameNotFoundException {
-//        return (UserDetails) hostAuthRepository.findByHostEmail(hostEmail).orElseThrow(
-//                ()->new UsernameNotFoundException(hostEmail));
-//    }
+    @Override
+    public UserDetails loadUserByUsername(String hostEmail) throws UsernameNotFoundException {
+        return (UserDetails) hostAuthRepository.findByHostEmail(hostEmail).orElseThrow(
+                ()->new UsernameNotFoundException(hostEmail));
+    }
 
     public ResponseEntity join(String hostEmail, String password, String nickName) {
         // 회원 가입 여부 체크
