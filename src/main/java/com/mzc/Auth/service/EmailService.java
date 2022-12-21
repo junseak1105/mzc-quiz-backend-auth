@@ -174,7 +174,7 @@ public class EmailService {
         }catch(MailException es){
             es.printStackTrace();
             //throw new IllegalArgumentException();
-            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.FAIL_EMAIL_SEND_AUTH_NUM), HttpStatus.BAD_REQUEST);// 메일로 보냈던 인증 코드를 서버로 리턴
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.FAIL_EMAIL_SEND_AUTH_NUM), HttpStatus.OK);// 메일로 보냈던 인증 코드를 서버로 리턴
 
         }
         return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.EMAIL_SEND_AUTH_NUM,ePw), HttpStatus.OK); // 메일로 보냈던 인증 코드를 서버로 리턴
@@ -183,7 +183,7 @@ public class EmailService {
     public ResponseEntity verifyEmail(String key){
         String emailAuth = redisUtil.getData(key);
         if (emailAuth == null) {
-            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.AUTH_NUM_CHECK_INVALID_EMAIL_SEND_AUTH_NUM), HttpStatus.BAD_REQUEST); // 유효 하지 않은 이메일 인증 번호
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.AUTH_NUM_CHECK_INVALID_EMAIL_SEND_AUTH_NUM), HttpStatus.OK); // 유효 하지 않은 이메일 인증 번호
     }
     redisUtil.deleteData(key); // 인증 완료 된 인증 번호 삭제
     return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.AUTH_NUM_CHECK_SUCCESS,emailAuth), HttpStatus.OK); // 메일로 보냈던 인증 코드를 서버로 리턴

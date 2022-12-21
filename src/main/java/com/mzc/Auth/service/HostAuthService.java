@@ -47,9 +47,9 @@ public class HostAuthService implements UserDetailsService{
     public ResponseEntity join(String hostEmail, String password, String nickName) {
         // 회원 가입 여부 체크
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
-        if(hostAuth.isPresent()){
-            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.DUPLICATED_HOST_EMAIL), HttpStatus.BAD_REQUEST);
-        }
+//        if(hostAuth.isPresent()){
+//            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.DUPLICATED_HOST_EMAIL), HttpStatus.BAD_REQUEST);
+//        }
 
         // 회원 가입 진행 -> host 등록
         return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password),nickName)))), HttpStatus.OK);
@@ -58,7 +58,7 @@ public class HostAuthService implements UserDetailsService{
     public ResponseEntity checkHostEmail(String hostEmail) {
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
         if(hostAuth.isPresent()){
-            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.DUPLICATED_HOST_EMAIL), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.DUPLICATED_HOST_EMAIL), HttpStatus.OK);
         }
         // 회원 가입 진행 -> host 등록
         return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.HOST_EMAIL_CHECK_OK), HttpStatus.OK);
@@ -69,7 +69,7 @@ public class HostAuthService implements UserDetailsService{
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
 
         if(!hostAuth.isPresent()){
-            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND), HttpStatus.OK);
         }else{
             //return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS), HttpStatus.OK);
             //DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS);
@@ -77,7 +77,7 @@ public class HostAuthService implements UserDetailsService{
 
         // 비밀 번호 체크
         if (!encoder.matches(password, hostAuth.get().getPassword())) {
-            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_PASSWORD), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_PASSWORD), HttpStatus.OK);
         }
         // 토큰 생성
         return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.CREATE_TOKEN, JwtTokenUtils.generateToken(hostEmail, secretKey, expiredTimeMx)), HttpStatus.OK);
