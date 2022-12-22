@@ -1,8 +1,6 @@
 package com.mzc.Auth.config;
 
 
-import com.mzc.Auth.config.filter.JwtTokenFilter;
-import com.mzc.Auth.exception.CustomAuthenticationEntryPoint;
 import com.mzc.Auth.service.HostAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity

@@ -1,8 +1,7 @@
 package com.mzc.Auth.service;
 
-import com.mzc.Auth.config.JWTUtil;
-import com.mzc.Auth.entity.HostAuth;
 import com.mzc.Auth.entity.Host;
+import com.mzc.Auth.entity.HostAuth;
 import com.mzc.Auth.repository.HostAuthRepository;
 import com.mzc.Auth.util.JwtTokenUtils;
 import com.mzc.global.Response.DefaultRes;

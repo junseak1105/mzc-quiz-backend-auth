@@ -1,4 +1,4 @@
-//package com.mzc.Auth.config;
+package com.mzc.Auth.config;//package com.mzc.Auth.config;
 //
 //import com.mzc.Auth.service.HostAuthService;
 //import org.springframework.beans.factory.annotation.Autowired;
