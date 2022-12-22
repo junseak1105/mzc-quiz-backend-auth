@@ -1,4 +1,4 @@
-package com.mzc.quiz.play.util;
+package com.mzc.util;
 
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
@@ -197,32 +197,20 @@ public class RedisUtil {
         return listOperations.leftPop(key,count);
     }
 
-    public Long leftPush(String key, String value){
-        return listOperations.leftPush(key, value);
-    }
-
-    public void listDataSet(String key, long index, String value){
-        listOperations.set(key,index,value);
-    }
-    // 리스트 크기
-    public Long listSize(String key){
-        return listOperations.size(key);
-    }
-
     // ----------------------------------------------------------------
     // [Custom]
 
 
     // Set에서 유저 목록 조회 후 리턴
-    public List<String> getUserList(String pinNum){
-
-
-        Set<String> setUserList = setOperations.members(genKey(RedisPrefix.USER.name(), pinNum));
-
-        List<String> stringUserList = new ArrayList<>();
-        stringUserList.addAll(setUserList);
-
-        return stringUserList;
-    }
+//    public List<String> getUserList(String pinNum){
+//
+//
+//        Set<String> setUserList = setOperations.members(genKey(RedisPrefix.USER.name(), pinNum));
+//
+//        List<String> stringUserList = new ArrayList<>();
+//        stringUserList.addAll(setUserList);
+//
+//        return stringUserList;
+//    }
 
 }

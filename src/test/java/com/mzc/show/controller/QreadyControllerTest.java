@@ -1,4 +1,4 @@
-package com.mzc.quiz.show.controller;
+package com.mzc.show.controller;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,5 @@
 package com.mzc.Auth.entity;
 
-import com.mzc.Auth.model.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

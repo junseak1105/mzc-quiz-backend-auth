@@ -1,4 +1,4 @@
-package com.mzc.Auth.model;
+package com.mzc.Auth.entity;
 
 public enum UserRole {
     HOST,

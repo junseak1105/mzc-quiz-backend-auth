@@ -1,6 +1,5 @@
-package com.mzc.Auth.model;
+package com.mzc.Auth.entity;
 
-import com.mzc.Auth.entity.HostAuth;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

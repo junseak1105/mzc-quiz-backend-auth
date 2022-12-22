@@ -1,7 +1,8 @@
 package com.mzc.Auth.service;
 
+import com.mzc.Auth.config.JWTUtil;
 import com.mzc.Auth.entity.HostAuth;
-import com.mzc.Auth.model.Host;
+import com.mzc.Auth.entity.Host;
 import com.mzc.Auth.repository.HostAuthRepository;
 import com.mzc.Auth.util.JwtTokenUtils;
 import com.mzc.global.Response.DefaultRes;
@@ -9,16 +10,20 @@ import com.mzc.global.Response.ResponseMessages;
 import com.mzc.global.Response.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import springfox.documentation.service.ResponseMessage;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class HostAuthService {
-
+public class HostAuthService implements UserDetailsService{
+    //    public class HostAuthService implements UserDetailsService {
     private final HostAuthRepository hostAuthRepository;
     private final BCryptPasswordEncoder encoder;
 
@@ -33,49 +38,48 @@ public class HostAuthService {
 //                new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("hostEmail is %s", hostEmail)));
 //    }
 
-    public DefaultRes join(String hostEmail, String password, String nickName) {
+    @Override
+    public UserDetails loadUserByUsername(String hostEmail) throws UsernameNotFoundException {
+        return (UserDetails) hostAuthRepository.findByHostEmail(hostEmail).orElseThrow(
+                ()->new UsernameNotFoundException(hostEmail));
+    }
+
+    public ResponseEntity join(String hostEmail, String password, String nickName) {
         // 회원 가입 여부 체크
-//        hostAuthRepository.findByHostEmail(hostEmail).ifPresent(it -> {
-//            throw new ApplicationException(ErrorCode.DUPLICATED_HOST_EMAIL, String.format("hostEmail is %s", hostEmail));
-//        });
-
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
-        if(hostAuth.isPresent()){
-            return DefaultRes.res(StatusCode.BAD_REQUEST,ResponseMessages.DUPLICATED_HOST_EMAIL);
-        }
+//        if(hostAuth.isPresent()){
+//            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.DUPLICATED_HOST_EMAIL), HttpStatus.BAD_REQUEST);
+//        }
 
         // 회원 가입 진행 -> host 등록
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password),nickName))));
+        return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.REGISTER_SUCCESS, Host.fromEntity(hostAuthRepository.save(HostAuth.of(hostEmail, encoder.encode(password),nickName)))), HttpStatus.OK);
     }
 
-    public DefaultRes checkHostEmail(String hostEmail) {
+    public ResponseEntity checkHostEmail(String hostEmail) {
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
         if(hostAuth.isPresent()){
-            return DefaultRes.res(StatusCode.BAD_REQUEST,ResponseMessages.DUPLICATED_HOST_EMAIL);
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.DUPLICATED_HOST_EMAIL), HttpStatus.OK);
         }
         // 회원 가입 진행 -> host 등록
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.HOST_EMAIL_CHECK_OK);
+        return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.HOST_EMAIL_CHECK_OK), HttpStatus.OK);
     }
 
-    public DefaultRes login(String hostEmail, String password) {
+    public ResponseEntity login(String hostEmail, String password) {
 
         Optional<HostAuth> hostAuth = hostAuthRepository.findByHostEmail(hostEmail);
-        if(hostAuth.isPresent()){
-            DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND);
+
+        if(!hostAuth.isPresent()){
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.HOST_EMAIL_NOT_FOUND), HttpStatus.OK);
         }else{
-            DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS);
+            //return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS), HttpStatus.OK);
+            //DefaultRes.res(StatusCode.OK, ResponseMessages.Login_SUCCESS);
         }
-
-        // 회원가입 여부 체크
-        //HostAuth hostAuth = hostAuthRepository.findByHostEmail(hostEmail).orElseThrow(() -> new ApplicationException(ErrorCode.HOST_EMAIL_NOT_FOUND, String.format("not founded %s", hostEmail)));
 
         // 비밀 번호 체크
-        //if(!userEntity.getPassword().equals(password)){
         if (!encoder.matches(password, hostAuth.get().getPassword())) {
-            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_PASSWORD);
-//            throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
+            return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.INVALID_PASSWORD), HttpStatus.OK);
         }
         // 토큰 생성
-        return DefaultRes.res(StatusCode.OK, ResponseMessages.CREATE_TOKEN, JwtTokenUtils.generateToken(hostEmail, secretKey, expiredTimeMx));
+        return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessages.CREATE_TOKEN, JwtTokenUtils.generateToken(hostEmail, secretKey, expiredTimeMx)), HttpStatus.OK);
     }
 }
