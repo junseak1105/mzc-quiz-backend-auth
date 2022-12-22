@@ -8,4 +8,6 @@ import lombok.Getter;
 public class HostLoginRequest {
     private String hostEmail;
     private String password;
+
+    private String refreshToken;
 }

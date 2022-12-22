@@ -1,7 +1,7 @@
 package com.mzc.Auth.response;
 
-import com.mzc.Auth.model.Host;
-import com.mzc.Auth.model.UserRole;
+import com.mzc.Auth.entity.Host;
+import com.mzc.Auth.entity.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
