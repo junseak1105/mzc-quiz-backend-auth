@@ -45,6 +45,11 @@ public class RedisUtil {
         return name + ":" + pin;
     }
 
+    // mail 인증 키
+    public String genAuthKey(String name, String key){
+        return name + ":" + key;
+    }
+
     // --------------------------------------------------------------------------
     // [ Generic ]
     // 해당 키가 존재하는지 체크
@@ -202,7 +207,6 @@ public class RedisUtil {
 
     // Set에서 유저 목록 조회 후 리턴
 //    public List<String> getUserList(String pinNum){
-//
 //
 //        Set<String> setUserList = setOperations.members(genKey(RedisPrefix.USER.name(), pinNum));
 //
