@@ -107,12 +107,11 @@ public class EmailService {
      */
     public ResponseEntity sendSimpleMessage(String to) throws Exception {
         MimeMessage message = createMessage(to);
-        try { //KEY -> AUTHNUM:이메일 VALUE:인증번호
-            //redisUtil.setHashData(authNum,"authNum",ePw);
-//            redisUtil.SET(authNum, ePw);
+        try {
+            //KEY -> 이메일:인증번호 VALUE -> 인증번호
             String authNum = redisUtil.genKey(to,ePw);
             //log.info("authNum :" + authNum);
-            redisUtil.setDataExpire(authNum,ePw,60*1L);
+            redisUtil.setDataExpire(authNum,ePw,60*3L);
             //redisUtil.expire(authNum, 3, TimeUnit.MINUTES);
 
             //redisUtil.setDataExpire(ePw,to,60*1L);
@@ -127,10 +126,8 @@ public class EmailService {
 
     public ResponseEntity verifyEmail(String key) {
         log.info("key : " + key);
-        //String emailAuth = (String) redisUtil.GetHashData(key,"authNum");
         String emailAuth = redisUtil.getData(key);
         System.out.println("emailAuth!! :" + emailAuth);
-        log.info("emailAuth : " + emailAuth);
         if (emailAuth == null) {
             return new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessages.AUTH_NUM_CHECK_INVALID_EMAIL_SEND_AUTH_NUM), HttpStatus.OK); // 유효 하지 않은 이메일 인증 번호
         }
