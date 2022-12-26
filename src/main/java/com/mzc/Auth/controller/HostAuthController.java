@@ -22,19 +22,6 @@ public class HostAuthController {
     final private HostAuthService hostAuthService;
     private final EmailService emailService;
 
-//    @PostMapping("/join")
-//    public Response<HostJoinReponse> join(@RequestBody HostJoinRequest request){
-//        Host host = hostAuthService.join(request.getHostEmail(),request.getPassword());
-//        return Response.success(HostJoinReponse.fromHost(host));
-//    }
-
-    //@ApiOperation(value = "호스트 로그인", notes = "필수 데이터 : hostEmail, password")
-//    @PostMapping("/login")
-//    public Response<HostLoginResponse> login(@RequestBody HostLoginRequest request) {
-//        String token = hostAuthService.login(request.getHostEmail(), request.getPassword());
-//        return Response.success(new HostLoginResponse(token));
-//    }
-
     @ApiOperation(value = "호스트 회원가입", notes = "필수 데이터 : hostEmail, nickName, password")
     @PostMapping("/join")
     public ResponseEntity join(@RequestBody HostJoinRequest request){
@@ -47,18 +34,9 @@ public class HostAuthController {
         return hostAuthService.checkHostEmail(request.getHostEmail());
     }
 
-//    @PostMapping("/join/mailConfirm")
-//    @ResponseBody
-//    public String mailConfirm(@RequestBody HostJoinRequest request) throws Exception {
-//        String code = emailService.sendSimpleMessage(request.getHostEmail());
-//        log.info("인증코드 : " + code);
-//        return code;
-//    }
     @ApiOperation(value = "호스트 회원가입 이메일 인증", notes = "필수 데이터 : hostEmail")
     @PostMapping("/join/mailConfirm")
     public ResponseEntity mailConfirm(@RequestBody HostJoinRequest request) throws Exception {
-//        String code = emailService.sendSimpleMessage(email);
-//        log.info("인증코드 : " + code);
         return emailService.sendSimpleMessage(request.getHostEmail());
     }
 
@@ -74,15 +52,4 @@ public class HostAuthController {
         return hostAuthService.login(request.getHostEmail(), request.getPassword());
 
     }
-
-//    @GetMapping("/host")
-//    public DefaultRes host(Authentication authentication) {
-//        return hostAuthService.loadFindByHostEmail(authentication.getName());
-//    }
-
-//    @ResponseBody
-//    @GetMapping("/auth")
-//    public Authentication auth(){
-//        return SecurityContextHolder.getContext().getAuthentication();
-//    }
 }
