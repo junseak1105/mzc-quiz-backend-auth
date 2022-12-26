@@ -26,29 +26,22 @@ public class AutenticationConfig extends WebSecurityConfigurerAdapter {
     private String key;
 
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors();
-        return http.build();
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable() // 세션 보안, 토큰을 사용한 인증방식이기 때문에 세션 보호의 필요가 없음 disable
-                .cors().configurationSource(corsConfigurationSource())
-                .and()
+        http.cors().and().csrf().disable() // 세션 보안, 토큰을 사용한 인증방식이기 때문에 세션 보호의 필요가 없음 disable
+
                 .authorizeRequests()
-                .antMatchers("/*").permitAll()
-//                .antMatchers("/*/hostauth/join", "/*/hostauth/login").permitAll() // 모든 상황에서 회원가입(해당 경로 인증 필요 없음)
-//                .antMatchers("/v1/**").permitAll() // 이외의 요청은 인증이 필요
+                .antMatchers("/**").permitAll()
+                //.antMatchers("/*/hostauth/join", "/*/hostauth/login").permitAll() // 모든 상황에서 회원가입(해당 경로 인증 필요 없음)
+                //.antMatchers("/v1/**").permitAll() // 이외의 요청은 인증이 필요
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session 기반 사용 하지 않음
                 .and()
                 .exceptionHandling();
-//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-//                .and()
-//                .addFilterBefore(new JwtTokenFilter(hostAuthService, key), UsernamePasswordAuthenticationFilter.class);
+                //.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                //.and()
+                //.addFilterBefore(new JwtTokenFilter(hostAuthService, key), UsernamePasswordAuthenticationFilter.class);
     }
 
     // CORS 허용 적용
@@ -59,6 +52,7 @@ public class AutenticationConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        configuration.addAllowedOriginPattern("*");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
