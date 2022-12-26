@@ -73,16 +73,6 @@ public class EmailService {
     }
 
     // 인증코드 만들기
-//    public static String createKey() {
-//        StringBuffer key = new StringBuffer();
-//        Random rnd = new Random();
-//
-//        for (int i = 0; i < 6; i++) { // 인증코드 6자리
-//            key.append((rnd.nextInt(10)));
-//        }
-//        return key.toString();
-//    }
-
     public static String createKey() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
@@ -115,26 +105,17 @@ public class EmailService {
         MimeMessage 객체 안에 내가 전송할 메일의 내용을 담아준다.
         bean으로 등록해둔 javaMailSender 객체를 사용하여 이메일 send
      */
-//    public String sendSimpleMessage(String to)throws Exception {
-//        MimeMessage message = createMessage(to);
-//        try{
-//            javaMailSender.send(message); // 메일 발송
-//        }catch(MailException es){
-//            es.printStackTrace();
-//            throw new IllegalArgumentException();
-//        }
-//        return ePw; // 메일로 보냈던 인증 코드를 서버로 리턴
-//    }
     public ResponseEntity sendSimpleMessage(String to) throws Exception {
         MimeMessage message = createMessage(to);
         try { //KEY -> AUTHNUM:이메일 VALUE:인증번호
             //redisUtil.setHashData(authNum,"authNum",ePw);
 //            redisUtil.SET(authNum, ePw);
-            //String authNum = redisUtil.genKey(ePw,to);
+            String authNum = redisUtil.genKey(to,ePw);
             //log.info("authNum :" + authNum);
-            redisUtil.setDataExpire(ePw,to,60*1L);
-            //redisUtil.setDataExpire(authNum,ePw,60*1L);
+            redisUtil.setDataExpire(authNum,ePw,60*1L);
             //redisUtil.expire(authNum, 3, TimeUnit.MINUTES);
+
+            //redisUtil.setDataExpire(ePw,to,60*1L);
             javaMailSender.send(message); // 메일 발송
         } catch (MailException es) {
             es.printStackTrace();
