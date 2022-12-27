@@ -50,19 +50,20 @@ public class EmailService {
 
         String msg = "";
         //msg += "<div align='center' style='background-image: url(https://img.freepik.com/free-vector/alien-planet-landscape-cosmic-background-deserted-coastline-with-mountains-view-glowing-cleft-stars-shining-spheres-space-extraterrestrial-pc-game-backdrop-cartoon-vector-illustration_107791-8012.jpg?w=826&t=st=1671701382~exp=1671701982~hmac=090b066d0594c2aecc9fccb11ac00994dd00309314e2ff267efe3a55703108f5); background-repeat: no-repeat; background-size: cover; background-position: center'>";
-        msg += "<div align='center' style='background-image: url(        https://img.freepik.com/free-vector/cartoon-podium-background-design-illustration_52683-70695.jpg?w=1380&t=st=1671761892~exp=1671762492~hmac=d223f7ff1c36a9fa5b37c0d48b2fd8a5c080f0ac67639e1c6e27d579a6ded1a7); background-repeat: no-repeat; background-size: cover; background-position: center'>";
+        msg += "<div align='center' style='background-image: url(https://img.freepik.com/free-vector/cartoon-podium-background-design-illustration_52683-70695.jpg?w=1380&t=st=1671761892~exp=1671762492~hmac=d223f7ff1c36a9fa5b37c0d48b2fd8a5c080f0ac67639e1c6e27d579a6ded1a7); background-repeat: no-repeat; background-size: cover; background-position: center'>";
         msg += "<img src=\"https://img.freepik.com/free-vector/astronaut-sitting-planet-waving-hand-cartoon-vector-icon-illustration-science-technology-icon-concept-isolated-premium-vector-flat-cartoon-style_138676-3503.jpg?w=826&t=st=1671701009~exp=1671701609~hmac=a596f3a69793e4184312988f6ff1335541e29251111d808afd40dbf972ad5fe0\" alt=\"Mquiz Icon\" style=\"width=\" height=\"240\">";
+        msg += "<br>";
         msg += "<h1> 안녕하세요</h1>";
         msg += "<h1> 엠퀴즈 입니다.</h1>";
         msg += "<br>";
-        msg += "<p>아래 코드를 회원가입 창으로 돌아가 입력해주세요<p>";
-        msg += "<br>";
-        msg += "<p>엠퀴즈를 찾아주셔서 감사합니다!<p>";
-        msg += "<br>";
+        msg += "<h3>아래 코드를 회원가입 창으로 돌아가 입력해주세요</h3>";
+        //msg += "<br>";
+        msg += "<h3>엠퀴즈를 찾아주셔서 감사합니다!</h3>";
+        //msg += "<br>";
         //msg += "<div align='center' style='border:1px solid black; font-family:verdana';>";
         msg += "<div align='center' style='solid black; font-family:verdana';/>";
-        msg += "<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>";
-        msg += "<div style='font-size:150%'>";
+        msg += "<h3>회원가입 인증 코드입니다.</h3>";
+        msg += "<div style='font-size:150%; color:#FFD700'>";
         msg += "CODE : <strong>";
         msg += ePw + "</strong><div><br/> "; // 메일에 인증번호 넣기
         msg += "</div>";
